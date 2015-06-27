@@ -1,5 +1,4 @@
-0
-rts = (grunt) ->
+module.exports = (grunt) ->
 
   grunt.initConfig
 
@@ -10,12 +9,19 @@ rts = (grunt) ->
         src :['app/index.html']
 
     jade:
-      debug:
-        options:
+      debug: {
+        options: {
+          client: false,
           pretty: true
-          datas : {}
-        files:
-          'app/index.html' : 'dev/index.jade'
+        },
+        files: [ {
+          cwd: "dev/",
+          src: "**/*.jade",
+          dest: "app/",
+          expand: true,
+          ext: ".html"
+        } ]
+      }
 
     fileblocks:
       todos:
@@ -41,7 +47,14 @@ rts = (grunt) ->
             src: ['**', '**/*.css']
             dest: 'app/styles/'
           }
+          {
+            expand:true
+            cwd: 'dev/scripts'
+            src: ['**', '**/*.js']
+            dest: 'app/scripts/'
+          }
         ]
+
     coffee:
       build:
         expand:true

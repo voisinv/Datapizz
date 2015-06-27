@@ -11,5 +11,8 @@
     "d3.js"
   ],
   "author": "VIncent Voisin, Mathieu Deumie",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "grunt-contrib-jade": "^0.14.1"
+  }
 }
