@@ -16,7 +16,7 @@ module.exports = (grunt) ->
         },
         files: [ {
           cwd: "dev/",
-          src: "**/*.jade",
+          src: "{,*/}*.jade",
           dest: "app/",
           expand: true,
           ext: ".html"
@@ -29,7 +29,8 @@ module.exports = (grunt) ->
         blocks:
           app:
             src:[
-              './app/scripts/app.js'
+              './app/scripts/app.js',
+              './app/scripts/**/*.js'
             ]
 
     copy :
@@ -38,19 +39,19 @@ module.exports = (grunt) ->
           {
             expand:true
             cwd: 'dev/assets'
-            src: ['**', '**/*.*']
+            src: ['**', '{,*/}*.*']
             dest: 'app/assets/'
           }
           {
             expand:true
             cwd: 'dev/styles'
-            src: ['**', '**/*.css']
+            src: ['**', '{,*/}*.css']
             dest: 'app/styles/'
           }
           {
             expand:true
             cwd: 'dev/scripts'
-            src: ['**', '**/*.js']
+            src: ['**', '{,*/}*.js']
             dest: 'app/scripts/'
           }
         ]
@@ -73,8 +74,9 @@ module.exports = (grunt) ->
       all:
         files: [
           'Gruntfile.coffee'
-          'dev/*.*'
-          'dev/**/*.*'
+          'dev/*.*',
+          'dev/**/*',
+          'dev/scripts/{,*/}*.*'
         ]
         tasks : [
           'copy:main'
