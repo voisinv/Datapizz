@@ -55,15 +55,6 @@ module.exports = (grunt) ->
           }
         ]
 
-    coffee:
-      build:
-        expand:true
-        cwd: 'dev/scripts'
-        src: ['*.coffee']
-        dest: 'app/scripts'
-        ext: '.js'
-
-
     connect:
       options:
         hostname: 'localhost'
@@ -88,14 +79,11 @@ module.exports = (grunt) ->
         tasks : [
           'copy:main'
           'jade:debug'
-          'coffee'
           'fileblocks'
           'wiredep'
         ]
 
 
-
-  grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-jade'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-watch'
