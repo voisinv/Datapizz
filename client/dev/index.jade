@@ -4,8 +4,12 @@ html(ng-app='datapizz')
         // bower:css
         // endbower
     body
-        md-toolbar(layout='row')
-            h1.md-toolbar-tools(layout-align-gt-sm='left', flex='') Datapizz
+        md-toolbar(layout='row', ng-controller="MainController as main")
+            h1.md-toolbar-tools() Datapizz
+            span(flex)
+            md-button(md-no-ink, ng-click='main.connect()') Se connecter
+
+        section(layout='row', layout-align='center center') HELLO
 
         // bower:js
         // endbower

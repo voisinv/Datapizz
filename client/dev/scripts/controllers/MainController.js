@@ -1,3 +1,11 @@
-/**
- * Created by Mac-Vincent on 27/06/15.
- */
+function MainController(Server) {
+    var self = this;
+
+    self.connect = function() {
+        Server.connect().then(function() {});
+    }
+
+}
+
+angular.module('datapizz.controllers')
+    .controller('MainController', MainController);
