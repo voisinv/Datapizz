@@ -1,31 +1,28 @@
+var DOMAIN = 'localhost';
+var PORT = '3000';
+var API = 'api';
+
 var server_infos = {
-    "DOMAIN": 'localhost',
-    "PORT": '3000',
-    "ADRESS": 'http://'+ 'localhost' + ':' + '3000'
+  connect_api: 'http://' + DOMAIN + ':' + PORT + '/' + API
 };
 
 function server($http, SERVER_INFOS, Entities) {
+  return  {
+    connect: connect
+  };
 
-    var connect = function() {
-        console.log(SERVER_INFOS.ADRESS);
-        $http.get(SERVER_INFOS.ADRESS + '/api').then(
-            function(datas) {
-                console.info(datas)
-                Entities.load(datas.data);
-            },
-            function(errors) {
-            }
-        )
-
-     }
-    var methods = {
-        connect: connect
-    }
-
-    return methods;
+  function connect() {
+    $http.get(SERVER_INFOS.connect_api).then(
+      function(datas) {
+        Entities.load(datas.data);
+      },
+      function(errors) {
+      }
+    )
+  }
 
 }
 
 angular.module('datapizz.services')
-    .factory('Server', server)
-    .constant('SERVER_INFOS', server_infos)
+  .factory('Server', server)
+  .constant('SERVER_INFOS', server_infos)

@@ -4,7 +4,7 @@ function MainController(Server) {
     self.connect = function() {
         Server.connect();
 
-    }
+    };
 }
 
 angular.module('datapizz.controllers')

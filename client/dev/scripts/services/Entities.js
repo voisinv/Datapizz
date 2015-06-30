@@ -1,5 +1,5 @@
-var collection = function() {}
 
+var collection = function() {};
 collection.prototype.load = function(datas) {
     if(angular.isUndefined(datas)) throw new Error('entities is undefined');
     if(!angular.isArray(datas.links)) throw new Error('Links is not an array');
@@ -11,22 +11,18 @@ collection.prototype.load = function(datas) {
     this.tags = datas.tags;
 };
 
-
 function entities () {
-    this.links = [];
-    this.tags = [];
-    this.articles = [];
+    var privateCollection;
 
     this.load = function(datas) {
-        if(angular.isUndefined(datas)) throw new Error('entities is undefined');
-        if(!angular.isArray(datas.links)) throw new Error('Links is not an array');
-        if(!angular.isArray(datas.articles)) throw new Error('Articles is not an array');
-        if(!angular.isArray(datas.tags)) throw new Error('Tags is not an array');
+        privateCollection = new collection();
+        privateCollection.load(datas);
+    };
 
-        var c = new collection();
-        c.load(datas);
-        console.log('collection', c);
-    }
+    this.get = function() {
+        return privateCollection;
+    };
+
 }
 
 angular.module('datapizz.services')
