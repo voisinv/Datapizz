@@ -1,25 +1,23 @@
 var server_infos = {
     "DOMAIN": 'localhost',
     "PORT": '3000',
-    "ADRESS": 'http://' + this.DOMAIN + ':' +  this.PORT
+    "ADRESS": 'http://'+ 'localhost' + ':' + '3000'
 };
 
-function server($q, SERVER_INFOS) {
+function server($http, SERVER_INFOS, Entities) {
 
     var connect = function() {
-        var defered = $q.defer();
-
-        $q.get(SERVER_INFOS.ADRESS).then(
+        console.log(SERVER_INFOS.ADRESS);
+        $http.get(SERVER_INFOS.ADRESS + '/api').then(
             function(datas) {
-                $q.resolve();
+                console.info(datas)
+                Entities.load(datas.data);
             },
             function(errors) {
-                $q.reject();
             }
         )
 
-        return $q.promise;
-    }
+     }
     var methods = {
         connect: connect
     }

@@ -2,9 +2,9 @@ function MainController(Server) {
     var self = this;
 
     self.connect = function() {
-        Server.connect().then(function() {});
-    }
+        Server.connect();
 
+    }
 }
 
 angular.module('datapizz.controllers')
