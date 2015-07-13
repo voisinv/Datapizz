@@ -19,5 +19,8 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-file-blocks": "^0.4.0",
     "grunt-wiredep": "^2.0.0"
+  },
+  "dependencies": {
+    "grunt-contrib-less": "^1.0.1"
   }
 }

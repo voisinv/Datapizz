@@ -12,7 +12,7 @@ function server($http, SERVER_INFOS, Entities) {
   };
 
   function connect() {
-    $http.get(SERVER_INFOS.connect_api).then(
+    $http.get('/api').then(
       function(datas) {
         Entities.load(datas.data);
       },
@@ -20,7 +20,6 @@ function server($http, SERVER_INFOS, Entities) {
       }
     )
   }
-
 }
 
 angular.module('datapizz.services')

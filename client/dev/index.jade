@@ -3,13 +3,17 @@ html(ng-app='datapizz')
         title Datapizz
         // bower:css
         // endbower
+        <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css" />
+        link(rel='stylesheet', href='styles/styles.css')
     body
         md-toolbar(layout='row', ng-controller="MainController as main")
             h1.md-toolbar-tools() Datapizz
             span(flex)
             md-button(md-no-ink, ng-click='main.connect()') Se connecter
 
-        section(layout='row', layout-align='center center') HELLO
+        section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl')
+            md-button(md-no-ink, ng-if='!graphCtrl.collectionReady', ng-click='graphCtrl.display()') Display Graph
+            main-graph#graph(ng-if='graphCtrl.collectionReady', collection='graphCtrl.entities')
 
         // bower:js
         // endbower

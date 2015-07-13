@@ -23,6 +23,13 @@ module.exports = (grunt) ->
         } ]
       }
 
+    less:
+      development:
+        options:
+          compress: true
+        files:
+          'app/styles/styles.css': 'dev/less/styles.less'
+
     fileblocks:
       todos:
         src:'./app/index.html'
@@ -83,6 +90,7 @@ module.exports = (grunt) ->
           'jade:debug'
           'fileblocks'
           'wiredep'
+          'less'
         ]
 
 
@@ -90,6 +98,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-connect'
+  grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-wiredep'
   grunt.loadNpmTasks 'grunt-file-blocks'
 

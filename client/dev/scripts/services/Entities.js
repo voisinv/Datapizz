@@ -17,6 +17,7 @@ function entities () {
     this.load = function(datas) {
         privateCollection = new collection();
         privateCollection.load(datas);
+        console.log('privateCollection', privateCollection);
     };
 
     this.get = function() {
