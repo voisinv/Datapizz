@@ -8,8 +8,9 @@ html(ng-app='datapizz')
     body
         md-toolbar(layout='row', ng-controller="MainController as main")
             h1.md-toolbar-tools() Datapizz
-            span(flex)
-            md-button(md-no-ink, ng-click='main.connect()') Se connecter
+            span.flex
+            md-button(md-no-ink, ng-if='!main.connected', ng-click='main.connect()') Se connecter
+            md-button(md-no-ink, ng-if='main.connected') Connecté
 
         section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl')
             md-button(md-no-ink, ng-if='!graphCtrl.collectionReady', ng-click='graphCtrl.display()') Display Graph

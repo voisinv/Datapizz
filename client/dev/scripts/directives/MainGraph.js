@@ -85,10 +85,9 @@ function mainGraph($window) {
           })
 
         node.append("text")
-          .attr("dx", function(d) {return d.radius+1})
+          .attr("dx", function(d) {return d.radius -1})
           .attr("dy", ".35em")
           .attr('opacity', function(d) {
-            console.log(d.radius, maxradiuscircle, d.radius / maxradiuscircle)
             return (d.radius / maxradiuscircle).toFixed(2) * 4;
           })
           .text(function(d) {return d.value })

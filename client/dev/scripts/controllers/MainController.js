@@ -1,9 +1,10 @@
 function MainController(Server) {
     var self = this;
+    self.connected = false;
 
     self.connect = function() {
-        Server.connect();
-
+      Server.connect();
+      self.connected = true;
     };
 }
 
