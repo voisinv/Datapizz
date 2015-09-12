@@ -22,14 +22,23 @@ function mainGraph($window) {
       var force = d3.layout.force()
         .nodes(scope.collection.tags)
         .links(scope.collection.links);
+      var maxradiuscircle = _.max(scope.collection.tags, function(d) {
+        return d.radius;
+      }).radius;
 
+      var maxradiusline = _.max(scope.collection.links, function(d) {
+        return d.value;
+      }).value;
       function update() {
         var link = svg.selectAll(".link")
           .data(scope.collection.links);
         link.enter().append("line")
           .attr("class", "link")
+          .attr('opacity', function(d) {
+            return d.value / maxradiusline;
+          })
           .style("stroke-width", function (d) {
-            return d.value;
+            return d.value * 0.8;
           });
 
         link.transition().duration(3000)
@@ -49,15 +58,21 @@ function mainGraph($window) {
         node.append('circle')
           .attr('class', 'node')
           .attr("r", function (d) {
-            return (d.radius - 1) * 2;//0.4;
+            return (d.radius - 1);//0.4;
           })
           .attr("id", function (d) {
             return 'circle-' + d.value;
           })
+          .attr('opacity', function(d) {
+            return d.radius / maxradiuscircle;
+          })
           .style("fill", function (d, i) {
             return '#3498db'
           })
+
+
           .on('mouseup', function(e) {
+
             /*
              scope.main.articleSelected = e;
              $mdSidenav('right').open()
@@ -70,8 +85,12 @@ function mainGraph($window) {
           })
 
         node.append("text")
-          .attr("dx", function(d) {return d.radius+5})
+          .attr("dx", function(d) {return d.radius+1})
           .attr("dy", ".35em")
+          .attr('opacity', function(d) {
+            console.log(d.radius, maxradiuscircle, d.radius / maxradiuscircle)
+            return (d.radius / maxradiuscircle).toFixed(2) * 4;
+          })
           .text(function(d) {return d.value })
         //.style("stroke", "gray");
 
