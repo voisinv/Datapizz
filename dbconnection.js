@@ -3,11 +3,12 @@ var Firebase = require('firebase');
 
 var mockedDatas = require('./pizzaaa-export.json');
 
-var db = new Firebase('https://test-datapizz.firebaseio.com/');
+var db = new Firebase('https://datapizzz.firebaseio.com/');
 
 // PRIVATE
 function getIndex (value) {
   var length = this.length;
+  console.log('getIndex', this.length, value)
   for(var index = 0; index < length; index++) {
     if(this[index].value == value) return index;
   }
@@ -22,16 +23,16 @@ var getIdFromValue = function(ref) {
   return getIndex.call(this, ref);
 };
 
-var getId = function(index) {
-  return getIdFromValue.call(this, getValueFromIndex.call(this, index));
+var getId = function(value) {
+  return getIndex.call(this, value);
 };
 
-var getLink = function(allTags, links) {
-  var numberOfTags = this.length;
+var getLink = function(tags, allTags, links) {
+  var numberOfTags = tags.length;
   for(var fIt = 0; fIt < numberOfTags; fIt++) {
     for(var sIt = fIt + 1; sIt < numberOfTags; sIt++) {
-      var idSource = getId.call(allTags, fIt);
-      var idTarget = getId.call(allTags, sIt);
+      var idSource = getId.call(allTags, tags[fIt]);
+      var idTarget = getId.call(allTags, tags[sIt]);
       console.log(numberOfTags, idSource, idTarget);
       var link = _.findWhere(links, {source: idSource, target: idTarget});
       // If link already exist
@@ -57,7 +58,8 @@ var getFullObject = function(result) {
 
   result.articles.forEach(function(article) {
     if(article.tags.length) {
-      getLink.call(article.tags, result.tags, obj.links);
+      console.log('article',article.tags.length, obj.links.length);
+      getLink(article.tags, result.tags, obj.links);
     }
   });
 
