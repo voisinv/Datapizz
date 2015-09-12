@@ -28,24 +28,17 @@ var getId = function(index) {
 
 var getLink = function(allTags, links) {
   var numberOfTags = this.length;
-  var fIt = 0;
-  var sIt = fIt + 1;
-  var getIdSource = getId.bind(allTags, fIt);
-  var getIdTarget = getId.bind(allTags, sIt);
-  for(fIt = 0; fIt < numberOfTags - 1; fIt++) {
-    for(sIt = fIt + 1; sIt < numberOfTags; sIt++) {
-      /*
-      var idSource = getIdFromValue(getValueFromIndex(fIt).apply(allTags)).apply(allTags);
-
-      var idTarget = getIdFromValue(getValueFromIndex(sIt).apply(allTags)).apply(allTags);
-      */
-      var idSource = getIdSource();
-      var idTarget = getIdTarget();
+  for(var fIt = 0; fIt < numberOfTags; fIt++) {
+    for(var sIt = fIt + 1; sIt < numberOfTags; sIt++) {
+      var idSource = getId.call(allTags, fIt);
+      var idTarget = getId.call(allTags, sIt);
+      console.log(numberOfTags, idSource, idTarget);
       var link = _.findWhere(links, {source: idSource, target: idTarget});
       // If link already exist
       if(link) {
         link.value += 1;
       } else {
+        console.log('link added');
         links.push({
           source: idSource,
           target: idTarget,
@@ -61,13 +54,6 @@ var getFullObject = function(result) {
     articles : result.articles,
     tags : result.tags
   };
-  /*
-  var i = 0, length;
-  result.articles.forEach(function(article, i) {
-    if(article.tags.length > 1){
-      createLinksBetweenArticleTags(result.tags, obj.links).apply(article.tags);
-    }
-  });*/
 
   result.articles.forEach(function(article) {
     if(article.tags.length) {
@@ -83,14 +69,6 @@ var dbconnection = {
     get : function(res, name) {
       db.once('value', function(s) {
         var obj = getFullObject(s.val());
-
-        /*
-        for(i, length = datas.articles.length; i < length; i++) {
-          var tagsOfElement = datas.articles[i].tags;
-          if(tagsOfElement.length > 1){
-            createLinksBetweenArticleTags(tagsOfElement, datas.tags, obj.links);
-          }
-        }*/
         res.status(200).send(obj);
       });
 
