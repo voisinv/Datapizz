@@ -3,11 +3,12 @@ var Firebase = require('firebase');
 
 var mockedDatas = require('./pizzaaa-export.json');
 
-var db = new Firebase('https://test-datapizz.firebaseio.com/');
+var db = new Firebase('https://datapizzz.firebaseio.com/');
 
 // PRIVATE
 function getIndex (value) {
   var length = this.length;
+  console.log('getIndex', this.length, value)
   for(var index = 0; index < length; index++) {
     if(this[index].value == value) return index;
   }
@@ -19,34 +20,26 @@ var getValueFromIndex = function(index) {
 };
 
 var getIdFromValue = function(ref) {
-  return getIndex(ref).apply(this);
+  return getIndex.call(this, ref);
 };
 
-var getId = function(index) {
-  return getIdFromValue(getValueFromIndex(index).apply(this)).apply(this);
-}
+var getId = function(value) {
+  return getIndex.call(this, value);
+};
 
-var getLink = function(allTags, links) {
-  var numberOfTags = this.length;
-  var fIt = 0;
-  var sIt = fIt + 1;
-  var getIdSource = getId.bind(allTags, fIt);
-  var getIdTarget = getId.bind(allTags, sIt);
-
-  for(fIt = 0; fIt < numberOfTags - 1; fIt++) {
-    for(sIt = fIt + 1; sIt < numberOfTags; sIt++) {
-      /*
-      var idSource = getIdFromValue(getValueFromIndex(fIt).apply(allTags)).apply(allTags);
-
-      var idTarget = getIdFromValue(getValueFromIndex(sIt).apply(allTags)).apply(allTags);
-      */
-      var idSource = getIdSource();
-      var idTarget = getIdTarget();
+var getLink = function(tags, allTags, links) {
+  var numberOfTags = tags.length;
+  for(var fIt = 0; fIt < numberOfTags; fIt++) {
+    for(var sIt = fIt + 1; sIt < numberOfTags; sIt++) {
+      var idSource = getId.call(allTags, tags[fIt]);
+      var idTarget = getId.call(allTags, tags[sIt]);
+      console.log(numberOfTags, idSource, idTarget);
       var link = _.findWhere(links, {source: idSource, target: idTarget});
       // If link already exist
       if(link) {
         link.value += 1;
       } else {
+        console.log('link added');
         links.push({
           source: idSource,
           target: idTarget,
@@ -62,36 +55,22 @@ var getFullObject = function(result) {
     articles : result.articles,
     tags : result.tags
   };
-  /*
-  var i = 0, length;
-  result.articles.forEach(function(article, i) {
-    if(article.tags.length > 1){
-      createLinksBetweenArticleTags(result.tags, obj.links).apply(article.tags);
-    }
-  });*/
 
   result.articles.forEach(function(article) {
     if(article.tags.length) {
-      getLink.apply(result.tags, article);
+      console.log('article',article.tags.length, obj.links.length);
+      getLink(article.tags, result.tags, obj.links);
     }
-  })
+  });
 
   return obj
-}
+};
 
 //PUBLIC
 var dbconnection = {
     get : function(res, name) {
-      db.once('value', function(s) {;
-        var obj = getFullObject(s.val())
-
-        /*
-        for(i, length = datas.articles.length; i < length; i++) {
-          var tagsOfElement = datas.articles[i].tags;
-          if(tagsOfElement.length > 1){
-            createLinksBetweenArticleTags(tagsOfElement, datas.tags, obj.links);
-          }
-        }*/
+      db.once('value', function(s) {
+        var obj = getFullObject(s.val());
         res.status(200).send(obj);
       });
 
@@ -101,6 +80,5 @@ var dbconnection = {
 
 var result = function (res, result) {
 
-};
-
+}
 module.exports = dbconnection;

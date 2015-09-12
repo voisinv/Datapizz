@@ -20,8 +20,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/api', function(req, res) {
-    var ent = entities.get(res);
-    res.status(200).send(ent);
+    entities.get(res);
+    //res.status(200).send(ent);
 })
 
 if (app.get('env') === 'development') {
