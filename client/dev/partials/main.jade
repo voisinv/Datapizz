@@ -1,14 +1,12 @@
-md-button.md-primary(ng-click='ctrl.toggleRight()')
-    | Toggle right
 md-sidenav.md-sidenav-right.md-whiteframe-z2(md-component-id='right')
     md-toolbar.md-toolbar-tools() {{ctrl.itemSelected}}
     md-content(layout-padding='')
         md-list
-            md-list-item.md-3-line(ng-repeat="item in ctrl.datas")
+            md-list-item.md-3-line(ng-repeat="article in datas")
                 .md-list-item-text
-                    h3 {{item[0]}}
-                    h4 {{item[1]}}
-                    p {{item[2]}}
+                    h3 {{article.title}}
+                    h4(ng-href='article.value') {{article.value}}
+                    p(ng-repeat='tag in article.tags') {{tag}}
                 md-divider(ng-if='!$last')
 
 #graph

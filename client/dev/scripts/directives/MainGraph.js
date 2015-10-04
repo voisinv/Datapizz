@@ -38,10 +38,23 @@ function mainGraph($window) {
           });
       };
       self.itemSelected = '';
+      self.datas = [];
+
     },
     controllerAs: 'ctrl',
     link: function(scope, elem, attrs, ctrl) {
       console.log('graphCtrl', scope.collection);
+
+      function updateListItem () {
+        scope.datas = scope.collection.articles.filter(function(e) {
+          return e.tags.some(function(tag) {
+            return tag === ctrl.itemSelected;
+          });
+        }).sort(function(a, b) {
+          return a.length - b.length;
+        });
+        console.log(self.datas)
+      }
 
       var w = $window.innerWidth*0.8,
         h = $window.innerHeight*0.7,
@@ -107,6 +120,7 @@ function mainGraph($window) {
           })
           .on('click', function(e) {
             ctrl.itemSelected = e.value;
+            updateListItem();
             ctrl.toggleRight();
           })
 

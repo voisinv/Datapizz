@@ -9,7 +9,7 @@ function MainController($scope, Server) {
 
 }
 
-function MainGraphController(Entities,  $timeout, $mdSidenav, $mdUtil, $log) {
+function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
   var self = this;
   self.collectionReady = false;
   self.display = function() {
