@@ -8,20 +8,10 @@ var db = new Firebase('https://datapizzz.firebaseio.com/');
 // PRIVATE
 function getIndex (value) {
   var length = this.length;
-  console.log('getIndex', this.length, value)
   for(var index = 0; index < length; index++) {
     if(this[index].value == value) return index;
   }
 }
-
-//TODO test indexOf
-var getValueFromIndex = function(index) {
-  return this[index].value;
-};
-
-var getIdFromValue = function(ref) {
-  return getIndex.call(this, ref);
-};
 
 var getId = function(value) {
   return getIndex.call(this, value);
@@ -33,13 +23,11 @@ var getLink = function(tags, allTags, links) {
     for(var sIt = fIt + 1; sIt < numberOfTags; sIt++) {
       var idSource = getId.call(allTags, tags[fIt]);
       var idTarget = getId.call(allTags, tags[sIt]);
-      console.log(numberOfTags, idSource, idTarget);
       var link = _.findWhere(links, {source: idSource, target: idTarget});
       // If link already exist
       if(link) {
         link.value += 1;
       } else {
-        console.log('link added');
         links.push({
           source: idSource,
           target: idTarget,
@@ -49,20 +37,18 @@ var getLink = function(tags, allTags, links) {
   }
 };
 
-var getFullObject = function(result) {
+var createLinks = function(result) {
   var obj = {
     links: [],
-    articles : result.articles,
-    tags : result.tags
+    articles : _.values(result.articles),
+    tags : _.values(result.tags)
   };
 
-  result.articles.forEach(function(article) {
+  obj.articles.forEach(function(article) {
     if(article.tags.length) {
-      console.log('article',article.tags.length, obj.links.length);
       getLink(article.tags, result.tags, obj.links);
     }
   });
-
   return obj
 };
 
@@ -70,7 +56,7 @@ var getFullObject = function(result) {
 var dbconnection = {
     get : function(res, name) {
       db.once('value', function(s) {
-        var obj = getFullObject(s.val());
+        var obj = createLinks(s.val());
         res.status(200).send(obj);
       });
 

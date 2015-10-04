@@ -53,7 +53,6 @@ function mainGraph($window) {
         }).sort(function(a, b) {
           return a.length - b.length;
         });
-        console.log(self.datas)
       }
 
       var w = $window.innerWidth*0.8,
@@ -73,6 +72,7 @@ function mainGraph($window) {
       var maxradiusline = _.max(scope.collection.links, function(d) {
         return d.value;
       }).value;
+
       function update() {
 
         var link = svg
