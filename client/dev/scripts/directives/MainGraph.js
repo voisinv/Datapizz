@@ -6,10 +6,41 @@ function mainGraph($window) {
 
   return {
     restrict: 'E',
+    controller: function() {
+
+    },
+    templateUrl: '../../partials/main.html',
     scope: {
       collection: '='
     },
-    link: function(scope, elem) {
+    controller: function($timeout, $mdSidenav, $mdUtil, $log) {
+      var self = this;
+      self.toggleRight = buildToggler('right');
+      /**
+       * Build handler to open/close a SideNav; when animation finishes
+       * report completion in console
+       */
+      function buildToggler(navID) {
+        console.log('clicked')
+        var debounceFn =  $mdUtil.debounce(function(){
+          $mdSidenav(navID)
+            .toggle()
+            .then(function () {
+              $log.debug("toggle " + navID + " is done");
+            });
+        },200);
+        return debounceFn;
+      }
+      self.close = function () {
+        $mdSidenav('right').close()
+          .then(function () {
+            $log.debug("close RIGHT is done");
+          });
+      };
+      self.itemSelected = '';
+    },
+    controllerAs: 'ctrl',
+    link: function(scope, elem, attrs, ctrl) {
       console.log('graphCtrl', scope.collection);
 
       var w = $window.innerWidth*0.8,
@@ -30,9 +61,14 @@ function mainGraph($window) {
         return d.value;
       }).value;
       function update() {
-        var link = svg.selectAll(".link")
+
+        var link = svg
+          .selectAll(".link")
           .data(scope.collection.links);
-        link.enter().append("line")
+
+        link
+          .enter()
+          .append("line")
           .attr("class", "link")
           .attr('opacity', function(d) {
             return d.value / maxradiusline;
@@ -69,7 +105,10 @@ function mainGraph($window) {
           .style("fill", function (d, i) {
             return '#3498db'
           })
-
+          .on('click', function(e) {
+            ctrl.itemSelected = e.value;
+            ctrl.toggleRight();
+          })
 
           .on('mouseup', function(e) {
 
