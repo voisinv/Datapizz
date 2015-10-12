@@ -16,11 +16,10 @@ html(ng-app='datapizz')
 
 
 
-        section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl')
+        section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl' ng-if='main.connected')
 
 
-            md-button(md-no-ink, ng-if='!graphCtrl.collectionReady', ng-click='graphCtrl.display()') Display Graph
-            main-graph(ng-if='graphCtrl.collectionReady', collection='graphCtrl.entities', itemSelected='')
+            main-graph( collection='graphCtrl.entities', itemSelected='')
 
 
 

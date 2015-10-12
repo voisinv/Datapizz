@@ -12,10 +12,10 @@ function server($http, SERVER_INFOS, Entities) {
   };
 
   function connect() {
-    $http.get('/api').then(
-      function(datas) {
-        console.log('data', datas)
-        Entities.load(datas.data);
+
+    return $http.get('/api').then(
+      function(res) {
+        return Entities.load(res.data, res.status);
       },
       function(errors) {
       }

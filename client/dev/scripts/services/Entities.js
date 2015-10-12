@@ -10,19 +10,22 @@ collection.prototype.load = function(datas) {
     this.articles = datas.articles;
     this.tags = datas.tags;
 };
+collection.prototype.get = function() {
+  return this;
+}
 
 function entities () {
     var privateCollection;
 
-    this.load = function(datas) {
-        privateCollection = new collection();
-        privateCollection.load(datas);
-        console.log('privateCollection', privateCollection);
+    this.load = function(datas, status) {
+      privateCollection = new collection();
+      privateCollection.load(datas);
+      return status;
     };
 
     this.get = function() {
         return privateCollection;
-    };
+    }.bind(this);
 
 }
 

@@ -3,8 +3,7 @@ function MainController($scope, Server) {
   self.connected = false;
 
   self.connect = function() {
-    Server.connect();
-    self.connected = true;
+    Server.connect().then(function(){self.connected = true;})
   };
 
 }
@@ -13,7 +12,8 @@ function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
   var self = this;
   self.collectionReady = false;
   self.display = function() {
-    self.entities = Entities.get();
+
+
     self.collectionReady = true;
   };
   self.toggleRight = buildToggler('right');
@@ -37,19 +37,6 @@ function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
         $log.debug("close RIGHT is done");
       });
   };
-  self.datas = [
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-    ['COUCOU', 'SECOND', 'THIRD'],
-  ]
 
 }
 

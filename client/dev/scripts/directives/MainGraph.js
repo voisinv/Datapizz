@@ -2,18 +2,15 @@
  * Created by Mac-Vincent on 06/07/15.
  */
 
-function mainGraph($window) {
+function mainGraph($window, Entities) {
 
   return {
     restrict: 'E',
-    controller: function() {
-
-    },
     templateUrl: '../../partials/main.html',
     scope: {
       collection: '='
     },
-    controller: function($timeout, $mdSidenav, $mdUtil, $log) {
+    controller: function ($timeout, $mdSidenav, $mdUtil, $log) {
       var self = this;
       self.toggleRight = buildToggler('right');
       /**
@@ -21,16 +18,16 @@ function mainGraph($window) {
        * report completion in console
        */
       function buildToggler(navID) {
-        console.log('clicked')
-        var debounceFn =  $mdUtil.debounce(function(){
+        var debounceFn = $mdUtil.debounce(function () {
           $mdSidenav(navID)
             .toggle()
             .then(function () {
               $log.debug("toggle " + navID + " is done");
             });
-        },200);
+        }, 200);
         return debounceFn;
       }
+
       self.close = function () {
         $mdSidenav('right').close()
           .then(function () {
@@ -39,51 +36,75 @@ function mainGraph($window) {
       };
       self.itemSelected = '';
       self.datas = [];
-
     },
     controllerAs: 'ctrl',
-    link: function(scope, elem, attrs, ctrl) {
-      console.log('graphCtrl', scope.collection);
-
-      function updateListItem () {
-        scope.datas = scope.collection.articles.filter(function(e) {
-          return e.tags.some(function(tag) {
+    link: function (scope, elem, attrs, ctrl) {
+      ctrl.entities = Entities.get();
+      init();
+      function updateListItem() {
+        ctrl.datas = ctrl.entities.articles.filter(function (e) {
+          return e.tags.some(function (tag) {
             return tag === ctrl.itemSelected;
           });
-        }).sort(function(a, b) {
+        }).sort(function (a, b) {
           return a.length - b.length;
         });
       }
 
-      var w = $window.innerWidth*0.8,
-        h = $window.innerHeight*0.7,
         color = d3.scale.category10();
 
-      var svg = d3.select('#graph').append("svg")
-        .attr("width", w)
-        .attr("height", h);
-      var force = d3.layout.force()
-        .nodes(scope.collection.tags)
-        .links(scope.collection.links);
-      var maxradiuscircle = _.max(scope.collection.tags, function(d) {
-        return d.radius;
-      }).radius;
+      var w, h, svg, force, maxradiuscircle, maxradiusline;
 
-      var maxradiusline = _.max(scope.collection.links, function(d) {
-        return d.value;
-      }).value;
+      function init() {
+         w = $window.innerWidth * 0.8;
+          h = $window.innerHeight * 0.7;
+        svg = d3.select('#graph').append("svg")
+          .attr("width", w)
+          .attr("height", h);
+
+        force = d3.layout.force()
+          .nodes(ctrl.entities.tags)
+          .links(ctrl.entities.links);
+
+        maxradiuscircle = _.max(ctrl.entities.tags, function (d) {
+          return d.radius;
+        }).radius;
+
+        maxradiusline = _.max(ctrl.entities.links, function (d) {
+          return d.value;
+        }).value;
+
+        update();
+        force.charge(170)
+          .linkDistance(60)
+          .size([w, h])
+          .gravity(.2)
+          .charge(function (d) {
+            return -1 * 170 * d.radius;
+          })
+          /*
+           .gravity(.01)
+           .charge(-80000)
+           .friction(0)
+           .linkDistance(function (d) {
+           return d.value * 10
+           })
+           .size([w, h])*/
+          .start()
+      }
+
 
       function update() {
 
         var link = svg
           .selectAll(".link")
-          .data(scope.collection.links);
+          .data(ctrl.entities.links);
 
         link
           .enter()
           .append("line")
           .attr("class", "link")
-          .attr('opacity', function(d) {
+          .attr('opacity', function (d) {
             return d.value / maxradiusline;
           })
           .style("stroke-width", function (d) {
@@ -97,7 +118,7 @@ function mainGraph($window) {
         link.exit().remove();
 
         var node = svg.selectAll(".node")
-          .data(scope.collection.tags);
+          .data(ctrl.entities.tags);
 
         node.enter()
           .append('g')
@@ -112,19 +133,19 @@ function mainGraph($window) {
           .attr("id", function (d) {
             return 'circle-' + d.value;
           })
-          .attr('opacity', function(d) {
+          .attr('opacity', function (d) {
             return d.radius / maxradiuscircle;
           })
-          .style("fill", function (d, i) {
+          .style("fill", function () {
             return '#3498db'
           })
-          .on('click', function(e) {
+          .on('click', function (e) {
             ctrl.itemSelected = e.value;
             updateListItem();
             ctrl.toggleRight();
           })
 
-          .on('mouseup', function(e) {
+          .on('mouseup', function (e) {
 
             /*
              scope.main.articleSelected = e;
@@ -138,12 +159,16 @@ function mainGraph($window) {
           })
 
         node.append("text")
-          .attr("dx", function(d) {return d.radius -1})
+          .attr("dx", function (d) {
+            return d.radius - 1
+          })
           .attr("dy", ".35em")
-          .attr('opacity', function(d) {
+          .attr('opacity', function (d) {
             return (d.radius / maxradiuscircle).toFixed(2) * 4;
           })
-          .text(function(d) {return d.value })
+          .text(function (d) {
+            return d.value
+          })
         //.style("stroke", "gray");
 
         /*
@@ -172,8 +197,8 @@ function mainGraph($window) {
          .call(force.drag);
          */
         node.transition().duration(1000)
-          .attr('r', function(d) {
-            return (d.radius - 1) *  0.4;
+          .attr('r', function (d) {
+            return (d.radius - 1) * 0.4;
           });
 
         force.on("tick", function () {
@@ -225,7 +250,6 @@ function mainGraph($window) {
 
 
       }
-      update();
     }
   }
 

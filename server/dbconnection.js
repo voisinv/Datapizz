@@ -3,7 +3,7 @@ var Firebase = require('firebase');
 
 var mockedDatas = require('./pizzaaa-export.json');
 
-var db = new Firebase('https://datapizzz.firebaseio.com/');
+var db = new Firebase('https://pizzaaa.firebaseio.com/');
 
 // PRIVATE
 function getIndex (value) {
@@ -46,7 +46,7 @@ var createLinks = function(result) {
 
   obj.articles.forEach(function(article) {
     if(article.tags.length) {
-      getLink(article.tags, result.tags, obj.links);
+      getLink(article.tags, obj.tags, obj.links);
     }
   });
   return obj
@@ -59,9 +59,7 @@ var dbconnection = {
         var obj = createLinks(s.val());
         res.status(200).send(obj);
       });
-
     }
-
 };
 
 var result = function (res, result) {
