@@ -65,15 +65,6 @@ module.exports = (grunt) ->
             dest: 'app/scripts/'
           }
         ]
-      toserver :
-        files :[
-          {
-            expand:true
-            cwd: 'app/'
-            src: ['**', '{,*/}*.*']
-            dest: '../server/app/'
-          }
-        ]
 
     connect:
       options:
@@ -131,7 +122,12 @@ module.exports = (grunt) ->
     grunt.task.run 'watch:all'
 
   grunt.registerTask 'build', ->
-    grunt.task.run 'dev'
+    grunt.task.run 'clean:client'
+    grunt.task.run 'copy:dist'
+    grunt.task.run 'jade'
+    grunt.task.run 'less'
+    grunt.task.run 'bower_concat'
+    grunt.task.run 'fileblocks'
     grunt.task.run 'copy:toserver'
 
 
