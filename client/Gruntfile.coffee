@@ -31,13 +31,22 @@ module.exports = (grunt) ->
           'app/styles/styles.css': 'dev/less/styles.less'
 
     fileblocks:
-      todos:
+      js:
         src:'./app/index.html'
         blocks:
-          app:
+          js:
             src:[
+              './app/bower/bower.js',
               './app/scripts/app.js',
               './app/scripts/**/*.js'
+            ]
+      css:
+        src:'./app/index.html'
+        blocks:
+          css:
+            src:[
+              './app/bower/bower.css',
+              './app/styles/styles.css'
             ]
 
     copy :
@@ -48,12 +57,6 @@ module.exports = (grunt) ->
             cwd: 'dev/assets'
             src: ['**', '{,*/}*.*']
             dest: 'app/assets/'
-          }
-          {
-            expand:true
-            cwd: 'dev/styles'
-            src: ['**', '{,*/}*.css']
-            dest: 'app/styles/'
           }
           {
             expand:true
@@ -93,27 +96,29 @@ module.exports = (grunt) ->
           'less'
         ]
 
+    bower_concat:
+      all:
+        dest: 'app/bower/bower.js',
+        cssDest: 'app/bower/bower.css'
 
-  grunt.loadNpmTasks 'grunt-contrib-jade'
-  grunt.loadNpmTasks 'grunt-contrib-copy'
-  grunt.loadNpmTasks 'grunt-contrib-watch'
-  grunt.loadNpmTasks 'grunt-contrib-connect'
-  grunt.loadNpmTasks 'grunt-contrib-less'
-  grunt.loadNpmTasks 'grunt-wiredep'
-  grunt.loadNpmTasks 'grunt-file-blocks'
+    clean: [
+      "app"
+    ]
+
+
+  require('load-grunt-tasks')(grunt)
+
 
   grunt.registerTask 'jade2', ['jade:debug']
 
-  grunt.registerTask 'serve', () ->
-    if grunt.option 'build'
-      grunt.log.ok 'Mode build'
-      grunt.run.task 'buildMode'
-    else
-      grunt.log.ok 'Mode développement'
-      grunt.task.run 'devMode'
 
-
-  grunt.registerTask 'devMode', ->
+  grunt.registerTask 'dev', ->
+    grunt.task.run 'clean'
+    grunt.task.run 'copy'
+    grunt.task.run 'jade'
+    grunt.task.run 'less'
+    grunt.task.run 'bower_concat'
+    grunt.task.run 'fileblocks'
     grunt.task.run 'connect:server'
     grunt.task.run 'watch:all'
 

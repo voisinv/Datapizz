@@ -1,8 +1,6 @@
 var _ = require('lodash');
 var Firebase = require('firebase');
 
-var mockedDatas = require('./pizzaaa-export.json');
-
 var db = new Firebase('https://pizzaaa.firebaseio.com/');
 
 // PRIVATE
@@ -63,6 +61,6 @@ var dbconnection = {
 };
 
 var result = function (res, result) {
+};
 
-}
 module.exports = dbconnection;
