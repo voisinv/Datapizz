@@ -24,19 +24,18 @@ app.use('/api', function(req, res) {
     //res.status(200).send(ent);
 });
 
-if (true) {
-    // This will change in production since we'll be using the dist folder
-    app.use(express.static(path.join(__dirname, '../client/')));
-    app.use(express.static(path.join(__dirname, '../client/app')));
 
-    app.use(function(err, req, res, next) {
+// This will change in production since we'll be using the dist folder
+app.use(express.static(path.join(__dirname, 'client/')));
+app.use(express.static(path.join(__dirname, 'client/app')));
+
+app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
       error: err
     });
-  });
-}
+});
 
 
 
