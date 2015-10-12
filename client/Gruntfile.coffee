@@ -50,7 +50,7 @@ module.exports = (grunt) ->
             ]
 
     copy :
-      main :
+      dist :
         files :[
           {
             expand:true
@@ -63,6 +63,15 @@ module.exports = (grunt) ->
             cwd: 'dev/scripts'
             src: ['**', '{,*/}*.js']
             dest: 'app/scripts/'
+          }
+        ]
+      toserver :
+        files :[
+          {
+            expand:true
+            cwd: 'app/'
+            src: ['**', '{,*/}*.*']
+            dest: '../server/app/'
           }
         ]
 
@@ -101,9 +110,9 @@ module.exports = (grunt) ->
         dest: 'app/bower/bower.js',
         cssDest: 'app/bower/bower.css'
 
-    clean: [
-      "app"
-    ]
+    clean:
+      client: ["app"]
+
 
 
   require('load-grunt-tasks')(grunt)
@@ -111,10 +120,9 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'jade2', ['jade:debug']
 
-
   grunt.registerTask 'dev', ->
-    grunt.task.run 'clean'
-    grunt.task.run 'copy'
+    grunt.task.run 'clean:client'
+    grunt.task.run 'copy:dist'
     grunt.task.run 'jade'
     grunt.task.run 'less'
     grunt.task.run 'bower_concat'
@@ -122,7 +130,9 @@ module.exports = (grunt) ->
     grunt.task.run 'connect:server'
     grunt.task.run 'watch:all'
 
-  grunt.registerTask 'buildMode', ->
+  grunt.registerTask 'build', ->
+    grunt.task.run 'dev'
+    grunt.task.run 'copy:toserver'
 
 
 
