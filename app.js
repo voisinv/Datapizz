@@ -22,9 +22,9 @@ app.use(cookieParser());
 app.use('/api', function(req, res) {
     entities.get(res);
     //res.status(200).send(ent);
-})
+});
 
-if (app.get('env') === 'development') {
+if (true) {
     // This will change in production since we'll be using the dist folder
     app.use(express.static(path.join(__dirname, '../client/')));
     app.use(express.static(path.join(__dirname, '../client/app')));
