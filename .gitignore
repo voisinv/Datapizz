@@ -1,5 +1,4 @@
 .idea
 client/bower_components
-client/node_modules
 node_modules
 Datapizz.iml
