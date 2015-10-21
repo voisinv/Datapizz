@@ -6,8 +6,6 @@ var bodyParser = require('body-parser');
 var _ = require('lodash');
 var entities = require('./dbconnection');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -17,6 +15,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.set('port', (process.env.PORT || 5000));
 
 app.use('/api', function(req, res) {
     entities.get(res);
@@ -25,7 +24,6 @@ app.use('/api', function(req, res) {
 
 
 // This will change in production since we'll be using the dist folder
-app.use(express.static(path.join(__dirname, 'client/')));
 app.use(express.static(path.join(__dirname, 'client/app')));
 
 app.use(function(err, req, res, next) {
@@ -36,6 +34,10 @@ app.use(function(err, req, res, next) {
     });
 });
 
+
+app.listen(app.get('port'), function() {
+  console.log('App is running, server is listening on port ', app.get('port'));
+});
 
 
 module.exports = app;

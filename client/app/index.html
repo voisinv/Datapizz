@@ -3,13 +3,13 @@
   <head>
     <title>Datapizz</title>
     <!-- fileblock:css css-->
-    <link href="app/bower/bower.css" rel="stylesheet" />
-    <link href="app/styles/styles.css" rel="stylesheet" />
+    <link href="bower/bower.css" rel="stylesheet" />
+    <link href="styles/styles.css" rel="stylesheet" />
     <!-- endfileblock-->
   </head>
   <body ng-controller="MainController as main">
     <md-toolbar layout="row">
-      <h1 class="md-toolbar-tools">Datapizz</h1><span class="flex"></span>
+      <h1 class="md-toolbar-tools">Datapizzz</h1><span class="flex"></span>
       <md-button md-no-ink="md-no-ink" ng-if="!main.connected" ng-click="main.connect()">Se connecter</md-button>
       <md-button md-no-ink="md-no-ink" ng-if="main.connected">Connecté</md-button>
     </md-toolbar>
@@ -17,12 +17,12 @@
       <main-graph collection="graphCtrl.entities" itemSelected=""></main-graph>
     </section>
     <!-- fileblock:js js-->
-    <script src="app/bower/bower.js"></script>
-    <script src="app/scripts/app.js"></script>
-    <script src="app/scripts/controllers/MainController.js"></script>
-    <script src="app/scripts/directives/MainGraph.js"></script>
-    <script src="app/scripts/services/Entities.js"></script>
-    <script src="app/scripts/services/Server.js"></script>
+    <script src="bower/bower.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/MainController.js"></script>
+    <script src="scripts/directives/MainGraph.js"></script>
+    <script src="scripts/services/Entities.js"></script>
+    <script src="scripts/services/Server.js"></script>
     <!-- endfileblock-->
   </body>
 </html>
