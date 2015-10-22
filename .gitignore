@@ -1,4 +1,7 @@
 .idea
-client/bower_components
-node_modules
 Datapizz.iml
+node_modules
+
+client/.*
+client/bower_components
+client/dist

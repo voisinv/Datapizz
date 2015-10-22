@@ -2,27 +2,58 @@
 <html ng-app="datapizz">
   <head>
     <title>Datapizz</title>
-    <!-- fileblock:css css-->
-    <link href="bower/bower.css" rel="stylesheet" />
-    <link href="styles/styles.css" rel="stylesheet" />
-    <!-- endfileblock-->
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- include: "type": "css", "files": "bower/*.css" -->
+    
+    <!-- /include -->
+
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
   </head>
   <body ng-controller="MainController as main">
     <md-toolbar layout="row">
-      <h1 class="md-toolbar-tools">Datapizzz</h1><span class="flex"></span>
+      <h1 class="md-toolbar-tools">Datapizz</h1><span class="flex"></span>
       <md-button md-no-ink="md-no-ink" ng-if="!main.connected" ng-click="main.connect()">Se connecter</md-button>
       <md-button md-no-ink="md-no-ink" ng-if="main.connected">Connecté</md-button>
     </md-toolbar>
     <section layout="row" layout-align="center center" ng-controller="MainGraphController as graphCtrl" ng-if="main.connected">
       <main-graph collection="graphCtrl.entities" itemSelected=""></main-graph>
     </section>
-    <!-- fileblock:js js-->
-    <script src="bower/bower.js"></script>
-    <script src="scripts/app.js"></script>
+
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/firebase/firebase.js"></script>
+    <script src="bower_components/angularfire/dist/angularfire.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- include: "type": "js", "files": "bower/**/*.js" -->
+    
+    <!-- /include -->
+
+    <!-- include: "type": "js", "files": "scripts/**/*.js" -->    
+<script src="scripts/app.js"></script>
     <script src="scripts/controllers/MainController.js"></script>
     <script src="scripts/directives/MainGraph.js"></script>
     <script src="scripts/services/Entities.js"></script>
     <script src="scripts/services/Server.js"></script>
-    <!-- endfileblock-->
+    <!-- /include -->
   </body>
 </html>

@@ -24,7 +24,7 @@ app.use('/api', function(req, res) {
 
 
 // This will change in production since we'll be using the dist folder
-app.use(express.static(path.join(__dirname, 'client/app')));
+app.use(express.static(path.join(__dirname, 'client/dist')));
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
