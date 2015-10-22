@@ -1,14 +1,11 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var _ = require('lodash')
+var _ = require('lodash');
 var entities = require('./dbconnection');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -18,26 +15,29 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.set('port', (process.env.PORT || 5000));
 
 app.use('/api', function(req, res) {
     entities.get(res);
     //res.status(200).send(ent);
-})
+});
 
-if (app.get('env') === 'development') {
-    // This will change in production since we'll be using the dist folder
-    app.use(express.static(path.join(__dirname, '../client/')));
-    app.use(express.static(path.join(__dirname, '../client/app')));
 
-    app.use(function(err, req, res, next) {
+// This will change in production since we'll be using the dist folder
+app.use(express.static(path.join(__dirname, 'client/app')));
+
+app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
       error: err
     });
-  });
-}
+});
 
+
+app.listen(app.get('port'), function() {
+  console.log('App is running, server is listening on port ', app.get('port'));
+});
 
 
 module.exports = app;
