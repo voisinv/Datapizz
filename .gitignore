@@ -1,6 +1,7 @@
 .idea
 Datapizz.iml
 node_modules
+npm-debug.log
 
 client/.*
 client/bower_components

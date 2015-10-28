@@ -4,19 +4,14 @@
     <title>Datapizz</title>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <!-- build:css(.) styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- include: "type": "css", "files": "bower/*.css" -->
-    
-    <!-- /include -->
-
-    <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
+      <!-- build:css(.) styles/vendor.css -->
+      <!-- bower:css -->
+      <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+      <!-- endbower -->
+      <!-- endbuild -->
+      <!-- build:css(.tmp) styles/main.css -->
+      <!-- endbuild -->
+      <link rel="stylesheet" href="styles/main.css" />
   </head>
   <body ng-controller="MainController as main">
     <md-toolbar layout="row">
@@ -44,12 +39,8 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- include: "type": "js", "files": "bower/**/*.js" -->
-    
-    <!-- /include -->
-
-    <!-- include: "type": "js", "files": "scripts/**/*.js" -->    
-<script src="scripts/app.js"></script>
+    <!-- include: "type": "js", "files": "scripts/**/*.js" -->
+    <script src="scripts/app.js"></script>
     <script src="scripts/controllers/MainController.js"></script>
     <script src="scripts/directives/MainGraph.js"></script>
     <script src="scripts/services/Entities.js"></script>
