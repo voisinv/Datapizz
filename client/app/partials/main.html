@@ -6,7 +6,7 @@
       <md-list-item ng-repeat="article in ctrl.datas" class="md-3-line">
         <div class="md-list-item-text">
           <h3>{{article.title}}</h3>
-          <h4 ng-href="article.value">{{article.url}}</h4>
+          <h4><a target="_blank" ng-href="http://{{article.url}}">lien article</a></h4>
           <p ng-repeat="tag in article.tags">{{tag}}</p>
         </div>
         <md-divider ng-if="!$last"></md-divider>
