@@ -1,7 +1,8 @@
 .idea
-client/app
-client/bower_components
-client/node_modules
-server/node_modules
-server/app
 Datapizz.iml
+node_modules
+npm-debug.log
+
+client/.*
+client/bower_components
+client/dist
