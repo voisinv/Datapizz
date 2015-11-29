@@ -6,7 +6,7 @@ function mainGraph($window, Entities) {
 
   return {
     restrict: 'E',
-    templateUrl: '../../partials/main.html',
+    templateUrl: 'partials/main',
     scope: {
       collection: '='
     },

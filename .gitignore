@@ -2,7 +2,5 @@
 Datapizz.iml
 node_modules
 npm-debug.log
-
-client/.*
-client/bower_components
-client/dist
+public/stylessheets/*.css
+.DS_Store
