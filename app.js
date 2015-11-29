@@ -69,6 +69,8 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
+app.listen(app.get('port') || 3000, function() {
+  console.log('App is running, server is listening on port ', app.get('port'));
+});
 
 module.exports = app;
