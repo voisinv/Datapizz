@@ -26,30 +26,31 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+// error handlers
 
+// development error handler
+// will print stacktrace
+app.set('port', app.get('port') || 3000);
+
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
+
 app.get('/partials/:name', function (req, res) {
   var name = req.params.name;
   res.render('partials/' + name);
 });
-
 app.use('/api', function(req, res) {
   entities.get(res);
   //res.status(200).send(ent);
 });
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
-
-// error handlers
-
-// development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -69,7 +70,7 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-app.listen(app.get('port') || 3000, function() {
+app.listen(app.get('port'), function() {
   console.log('App is running, server is listening on port ', app.get('port'));
 });
 
