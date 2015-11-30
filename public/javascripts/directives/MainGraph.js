@@ -51,16 +51,28 @@ function mainGraph($window, Entities) {
         });
       }
 
-        color = d3.scale.category10();
+      color = d3.scale.category10();
 
       var w, h, svg, force, maxradiuscircle, maxradiusline;
 
+      var x, y;
+
       function init() {
-         w = $window.innerWidth * 0.8;
+        x = d3.scale.linear()
+          .domain([0, $window.innerWidth * 0.8])
+          .range([0, $window.innerWidth * 0.8]);
+
+        y = d3.scale.linear()
+          .domain([0, $window.innerHeight])
+          .range([$window.innerHeight, 0]);
+
+        w = $window.innerWidth * 0.8;
           h = $window.innerHeight;
         svg = d3.select('#graph').append("svg")
           .attr("width", w)
-          .attr("height", h - 64);
+          .attr("height", h - 64)
+          .append('g')
+          //.call(d3.behavior.zoom().x(x).y(y).scaleExtent([1, 8]).on("zoom", zoom));
 
         force = d3.layout.force()
           .nodes(ctrl.entities.tags)
@@ -93,7 +105,25 @@ function mainGraph($window, Entities) {
           .start()
       }
 
+      var node, circle;
+      function zoom() {
+        node.attr("transform", transform);
+      }
+      function transform(d) {
+        console.log(d[0]);
+        return "translate(" + x(d[0]) + "," + y(d[1]) + ")";
+      }
 
+      var zoomListener = d3.behavior.zoom()
+        .scaleExtent([0.1, 3])
+        .on("zoom", zoomHandler);
+
+// function for handling zoom event
+      function zoomHandler() {
+        node.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+        svg.selectAll('.link').attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+      }
+      zoomListener(d3.select('#graph svg'))
       function update() {
 
         var link = svg
@@ -104,6 +134,7 @@ function mainGraph($window, Entities) {
           .enter()
           .append("line")
           .attr("class", "link")
+
           .attr('opacity', function (d) {
             return d.value / maxradiusline;
           })
@@ -113,12 +144,12 @@ function mainGraph($window, Entities) {
 
         link.transition().duration(3000)
           .style("stroke-width", function (d) {
-            return d.value;
+            return d.value / 2;
           });
         link.exit().remove();
 
-        var node = svg.selectAll(".node")
-          .data(ctrl.entities.tags);
+        node = svg.selectAll(".node")
+          .data(ctrl.entities.tags)
 
         node.enter()
           .append('g')
@@ -168,7 +199,7 @@ function mainGraph($window, Entities) {
           })
           .text(function (d) {
             return d.value
-          })
+          });
         //.style("stroke", "gray");
 
         /*
@@ -203,8 +234,8 @@ function mainGraph($window, Entities) {
 
         force.on("tick", function () {
           link.attr("x1", function (d) {
-            return d.source.x;
-          })
+              return d.source.x;
+            })
             .attr("y1", function (d) {
               return d.source.y;
             })
