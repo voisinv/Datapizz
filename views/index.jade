@@ -12,7 +12,7 @@ html(ng-app='datapizz')
             md-button(md-no-ink='md-no-ink', ng-if='main.connected') Connect&eacute;
 
          section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl', ng-if='main.connected')
-            main-graph(collection='graphCtrl.entities', itemselected='')
+            main-graph.graph(collection='graphCtrl.entities', itemselected='')
 
 
     script(src='https://code.jquery.com/jquery-2.1.4.min.js')

@@ -57,10 +57,10 @@ function mainGraph($window, Entities) {
 
       function init() {
          w = $window.innerWidth * 0.8;
-          h = $window.innerHeight * 0.7;
+          h = $window.innerHeight;
         svg = d3.select('#graph').append("svg")
           .attr("width", w)
-          .attr("height", h);
+          .attr("height", h - 64);
 
         force = d3.layout.force()
           .nodes(ctrl.entities.tags)
