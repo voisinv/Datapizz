@@ -24,7 +24,7 @@ function entities () {
     };
 
     this.get = function() {
-        return privateCollection;
+      return privateCollection;
     }.bind(this);
 
 }

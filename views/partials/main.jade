@@ -1,0 +1,12 @@
+md-sidenav.md-sidenav-right.md-whiteframe-z2(md-component-id='right')
+    md-toolbar.md-toolbar-tools {{ctrl.itemSelected}}
+    md-content(layout-padding='')
+        md-list
+            md-list-item.md-3-line(ng-repeat='article in ctrl.datas')
+                .md-list-item-text
+                    h3 {{article.title}}
+                    h4(ng-href='article.value') {{article.url}}
+                    p(ng-repeat='tag in article.tags') {{tag}}
+                md-divider(ng-if='!$last')
+#graph
+
