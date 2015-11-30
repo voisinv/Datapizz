@@ -30,7 +30,6 @@ app.use(require('less-middleware')(path.join(__dirname, 'public')));
 
 // development error handler
 // will print stacktrace
-app.set('port', app.get('port') || 3000);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
@@ -69,9 +68,6 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
-});
-app.listen(app.get('port'), function() {
-  console.log('App is running, server is listening on port ', app.get('port'));
 });
 
 module.exports = app;
