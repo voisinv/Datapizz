@@ -7,8 +7,12 @@ html(ng-app='datapizz')
          md-toolbar(layout='row')
             h1.md-toolbar-tools Datapizz
             span.flex
+            //span
+            //    md-slider(min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider").class
+            //    div(flex="20", layout-align="center center").layout
+            //        input(type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider")
+            //span.flex
             md-button(md-no-ink='md-no-ink', ng-if='!main.connected', ng-click='main.connect()') Se connecter
-
             md-button(md-no-ink='md-no-ink', ng-if='main.connected') Connect&eacute;
 
          section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl', ng-if='main.connected')
