@@ -9,13 +9,15 @@ function MainController(Server) {
     };
 }
 
-function MainGraphController($mdSidenav, $mdUtil, $log) {
+function MainGraphController($mdSidenav, $mdUtil, $log, Entities) {
     var self = this;
     self.collectionReady = false;
     self.display = function() {
         self.collectionReady = true;
     };
     self.toggleRight = buildToggler('right');
+    self.minDate = Entities.getMinDate();
+    self.maxDate = Entities.getMaxDate();
 
     /**
      * Build handler to open/close a SideNav; when animation finishes
