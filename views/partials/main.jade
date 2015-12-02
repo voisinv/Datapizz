@@ -4,9 +4,8 @@ md-sidenav.md-sidenav-right.md-whiteframe-z2(md-component-id='right')
         md-list
             md-list-item.md-3-line(ng-repeat='article in ctrl.datas')
                 .md-list-item-text
-                    h3 {{article.title}}
-                    h4(ng-href='article.value') {{article.url}}
+                    h3
+                        a(target='_blank', ng-href='http://{{article.url}}') {{article.title}}
                     p(ng-repeat='tag in article.tags') {{tag}}
                 md-divider(ng-if='!$last')
 #graph
-
