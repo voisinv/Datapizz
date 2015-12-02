@@ -11,22 +11,28 @@ collection.prototype.load = function(datas) {
     this.tags = datas.tags;
 };
 collection.prototype.get = function() {
-  return this;
-}
+    return this;
+};
 
 function entities () {
     var privateCollection;
 
     this.load = function(datas, status) {
-      privateCollection = new collection();
-      privateCollection.load(datas);
-      return status;
+        privateCollection = new collection();
+        privateCollection.load(datas);
+        return status;
     };
 
     this.get = function() {
-      return privateCollection;
+        console.log('collec');
+        console.log(privateCollection);
+        return privateCollection;
     }.bind(this);
 
+    this.getMinAndMaxDates = function() {
+        var articlesSortedByDate = _.sortByAll(privateCollection.articles, ['date']);
+        return {minDate: articlesSortedByDate[0].date, maxDate: articlesSortedByDate[articlesSortedByDate.length-1].date}
+    }.bind(this);
 }
 
 angular.module('datapizz.services')

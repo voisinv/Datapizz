@@ -25,4 +25,4 @@ function server($http, SERVER_INFOS, Entities) {
 
 angular.module('datapizz.services')
   .factory('Server', server)
-  .constant('SERVER_INFOS', server_infos)
+  .constant('SERVER_INFOS', server_infos);
