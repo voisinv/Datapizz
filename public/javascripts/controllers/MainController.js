@@ -9,36 +9,23 @@ function MainController(Server) {
     };
 }
 
-function MainGraphController($mdSidenav, $mdUtil, $log, Entities) {
+function MainGraphController(Entities) {
     var self = this;
+
+    self.beginDate = moment(Entities.getMinDate()).toDate();
+    self.minDate = moment(self.beginDate).subtract(1, 'days').toDate();
+    self.endDate = moment(Entities.getMaxDate()).toDate();
     self.collectionReady = false;
+
     self.display = function() {
         self.collectionReady = true;
     };
-    self.toggleRight = buildToggler('right');
-    self.minDate = Entities.getMinDate();
-    self.maxDate = Entities.getMaxDate();
 
-    /**
-     * Build handler to open/close a SideNav; when animation finishes
-     * report completion in console
-     */
-    function buildToggler(navID) {
-        return $mdUtil.debounce(function() {
-            $mdSidenav(navID)
-                .toggle()
-                .then(function () {
-                    $log.debug("toggle " + navID + " is done");
-                });
-        }, 200);
-    }
+    self.dateChanged = function() {
+        // maj entities list
+        Entities.filterCollection();
+        // reload graph
 
-    self.close = function () {
-        $mdSidenav('right')
-            .close()
-            .then(function () {
-                $log.debug("close RIGHT is done");
-            });
     };
 }
 

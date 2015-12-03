@@ -67,7 +67,7 @@ function mainGraph($window, Entities) {
           .range([$window.innerHeight, 0]);
 
         w = $window.innerWidth * 0.8;
-          h = $window.innerHeight;
+          h = $window.innerHeight * 0.94;
         svg = d3.select('#graph').append("svg")
           .attr("width", w)
           .attr("height", h - 64)
@@ -282,7 +282,7 @@ function mainGraph($window, Entities) {
 
       }
     }
-  }
+  };
 
   function collide(node) {
     var r = node.radius + 16,
