@@ -12,7 +12,6 @@ function server($http, SERVER_INFOS, Entities) {
   };
 
   function connect() {
-
     return $http.get('/api').then(
       function(res) {
         return Entities.load(res.data, res.status);

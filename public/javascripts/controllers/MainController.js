@@ -9,7 +9,7 @@ function MainController(Server) {
     };
 }
 
-function MainGraphController(Entities) {
+function MainGraphController(Entities, $rootScope) {
     var self = this;
 
     self.beginDate = moment(Entities.getMinDate()).toDate();
@@ -22,10 +22,11 @@ function MainGraphController(Entities) {
     };
 
     self.dateChanged = function() {
+        Entities.filterCollection(self.beginDate, self.endDate);
+        $rootScope.$broadcast('datesChanged');
         // maj entities list
-        Entities.filterCollection();
         // reload graph
-
+        //...
     };
 }
 

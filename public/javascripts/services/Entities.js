@@ -29,10 +29,31 @@ function entities () {
         return status;
     };
 
-    this.filterCollection = function() {
-        filteredCollection;
+    this.filterCollection = function(minDate, maxDate) {
+        // minDate et maxDate sous format ...
+        minDate = moment(minDate);
+        maxDate = moment(maxDate);
 
-        return filteredCollection;
+        filteredCollection.tags = _.slice(filteredCollection.tags, 10);
+
+        /*var idArticle = 5;
+        for(var i=0; i<filteredCollection.articles[5].tags.length; i++) {
+            var tag = _.find(users, function(chr) {
+                return chr.age < 40;
+            });
+        }
+
+
+        /*
+        5: Object
+        date: 1448908906955
+        tags: Array[3]
+        0: "prothese"
+        1: "3D"
+        2: "marketing"
+        length: 3
+        __proto__: Array[0]
+        title: "Des prothèses 3D"*/
     }.bind(this);
 
     this.get = function() {
@@ -40,13 +61,11 @@ function entities () {
     }.bind(this);
 
     this.getMinDate = function() {
-        var articlesSortedByDate = _.sortByAll(privateCollection.articles, ['date']);
-        return articlesSortedByDate[0].date;
+        return _.first(_.sortByAll(privateCollection.articles, ['date'])).date;
     }.bind(this);
 
     this.getMaxDate = function() {
-        var articlesSortedByDate = _.sortByAll(privateCollection.articles, ['date']);
-        return articlesSortedByDate[articlesSortedByDate.length-1].date;
+        return _.last(_.sortByAll(privateCollection.articles, ['date'])).date;
     }.bind(this);
 }
 

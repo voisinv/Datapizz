@@ -57,6 +57,11 @@ function mainGraph($window, Entities) {
 
       var x, y;
 
+      scope.$on('datesChanged', function() {
+          console.log('datesChanged');
+          update();
+      });
+
       function init() {
         x = d3.scale.linear()
           .domain([0, $window.innerWidth * 0.8])
@@ -123,7 +128,7 @@ function mainGraph($window, Entities) {
         node.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
         svg.selectAll('.link').attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
       }
-      zoomListener(d3.select('#graph svg'))
+      zoomListener(d3.select('#graph svg'));
       function update() {
 
         var link = svg
@@ -149,7 +154,7 @@ function mainGraph($window, Entities) {
         link.exit().remove();
 
         node = svg.selectAll(".node")
-          .data(ctrl.entities.tags)
+          .data(ctrl.entities.tags);
 
         node.enter()
           .append('g')
@@ -187,7 +192,7 @@ function mainGraph($window, Entities) {
              });
              */
 
-          })
+          });
 
         node.append("text")
           .attr("dx", function (d) {
