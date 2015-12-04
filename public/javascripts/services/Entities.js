@@ -29,9 +29,14 @@ function entities () {
         return privateCollection;
     }.bind(this);
 
-    this.getMinAndMaxDates = function() {
+    this.getMinDate = function() {
         var articlesSortedByDate = _.sortByAll(privateCollection.articles, ['date']);
-        return {minDate: articlesSortedByDate[0].date, maxDate: articlesSortedByDate[articlesSortedByDate.length-1].date}
+        return articlesSortedByDate[0].date;
+    }.bind(this);
+
+    this.getMaxDate = function() {
+        var articlesSortedByDate = _.sortByAll(privateCollection.articles, ['date']);
+        return articlesSortedByDate[articlesSortedByDate.length-1].date;
     }.bind(this);
 }
 
