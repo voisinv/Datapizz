@@ -42,6 +42,10 @@ app.use('/api', function(req, res) {
   entities.get(res);
   //res.status(200).send(ent);
 });
+app.use('/entities', function(req, res) {
+  entities.getNewEntities(req.body, res);
+  //res.status(200).send(ent);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

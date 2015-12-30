@@ -16,45 +16,30 @@ collection.prototype.get = function() {
     return this;
 };
 
+collection.prototype.clear = function() {
+    this.articles = [];
+    this.links = [];
+    this.tags = [];
+};
+
 
 function entities () {
-    var privateCollection;
-    var filteredCollection;
+    var privateCollection = new collection();
+    var filteredCollection = new collection();
 
     this.load = function(datas, status) {
-        privateCollection = new collection();
         privateCollection.load(datas);
-        filteredCollection = privateCollection;
-        console.log(filteredCollection);
+        filteredCollection = angular.copy(privateCollection);
+
         return status;
     };
 
-    this.filterCollection = function(minDate, maxDate) {
-        // minDate et maxDate sous format ...
-        minDate = moment(minDate);
-        maxDate = moment(maxDate);
+    this.loadNewEntities = function(datas, status) {
+        filteredCollection.clear();
+        filteredCollection.load(datas);
 
-        filteredCollection.tags = _.slice(filteredCollection.tags, 10);
-
-        /*var idArticle = 5;
-        for(var i=0; i<filteredCollection.articles[5].tags.length; i++) {
-            var tag = _.find(users, function(chr) {
-                return chr.age < 40;
-            });
-        }
-
-
-        /*
-        5: Object
-        date: 1448908906955
-        tags: Array[3]
-        0: "prothese"
-        1: "3D"
-        2: "marketing"
-        length: 3
-        __proto__: Array[0]
-        title: "Des prothèses 3D"*/
-    }.bind(this);
+        return status;
+    };
 
     this.get = function() {
         return filteredCollection;
