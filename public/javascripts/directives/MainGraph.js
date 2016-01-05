@@ -59,6 +59,7 @@ function mainGraph($window, Entities) {
 
             scope.$on('datesChanged', function () {
                 console.log('datesChanged');
+                ctrl.entities = Entities.get();
                 update();
             });
 
@@ -197,8 +198,9 @@ function mainGraph($window, Entities) {
 
                     });
 
-                node.append("text")
+                /*node.append("text")
                     .attr("dx", function (d) {
+                        console.log(d);
                         return d.radius - 1
                     })
                     .attr("dy", ".35em")
@@ -207,7 +209,7 @@ function mainGraph($window, Entities) {
                     })
                     .text(function (d) {
                         return d.value
-                    });
+                    });*/
                 //.style("stroke", "gray");
 
                 /*
