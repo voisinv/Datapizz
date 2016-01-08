@@ -53,7 +53,7 @@ function mainGraph($window, Entities) {
 
             color = d3.scale.category10();
 
-            var w, h, svg, force, maxradiuscircle, maxradiusline;
+            var w, h, svg, a, force, maxradiuscircle, maxradiusline;
 
             var x, y;
 
@@ -74,8 +74,8 @@ function mainGraph($window, Entities) {
 
                 w = $window.innerWidth * 0.8;
                 h = $window.innerHeight * 0.94;
-                svg = d3.select('#graph').append("svg")
-                    .attr("width", w)
+                a = d3.select('#graph').append("svg");
+                svg = a.attr("width", w)
                     .attr("height", h - 64)
                     .append('g');
                 //.call(d3.behavior.zoom().x(x).y(y).scaleExtent([1, 8]).on("zoom", zoom));
@@ -139,8 +139,7 @@ function mainGraph($window, Entities) {
                     .selectAll(".link")
                     .data(ctrl.entities.links);
 
-                link
-                    .enter()
+                link.enter()
                     .append("line")
                     .attr("class", "link")
 
@@ -153,9 +152,11 @@ function mainGraph($window, Entities) {
 
                 link.transition().duration(3000)
                     .style("stroke-width", function (d) {
-                        return d.value / 2;
+                        return d.value * 0.8;
                     });
+
                 link.exit().remove();
+
 
                 node = svg.selectAll(".node")
                     .data(ctrl.entities.tags);
@@ -183,24 +184,16 @@ function mainGraph($window, Entities) {
                         ctrl.itemSelected = e.value;
                         updateListItem();
                         ctrl.toggleRight();
-                    })
+                    });
 
-                    .on('mouseup', function (e) {
-
-                        /*
-                         scope.main.articleSelected = e;
-                         $mdSidenav('right').open()
-                         .then(function(i){
-                         console.log('i', e)
-                         i.node = e;
-                         });
-                         */
-
+                node.transition().duration(3000)
+                    .attr('r', function(d) {
+                        //console.log(d);
+                        return d.radius - 1;
                     });
 
                 /*node.append("text")
                     .attr("dx", function (d) {
-                        console.log(d);
                         return d.radius - 1
                     })
                     .attr("dy", ".35em")
@@ -210,37 +203,8 @@ function mainGraph($window, Entities) {
                     .text(function (d) {
                         return d.value
                     });*/
-                //.style("stroke", "gray");
 
-                /*
-                 var circle = node.enter()
-                 .append("circle")
-                 .attr('class', 'circle')
-                 .attr("r", function (d) {
-                 return d.radius - 1;
-                 })
-                 .attr("id", function (d) {
-                 return 'circle-' + d.value;
-                 })
-                 .style("fill", function (d, i) {
-                 return '#3498db'
-                 })
-                 .on('mouseover', function (d, i) {
-                 d3.selectAll("circle").attr('opacity', 0.3);
-                 d3.select(this).attr('opacity', 1);
-                 mouseover = true;
-                 main.hoverTag(d);
-                 })
-                 .on('mouseleave', function () {
-                 d3.selectAll("circle").attr('opacity', 1);
-                 })
-
-                 .call(force.drag);
-                 */
-                node.transition().duration(1000)
-                    .attr('r', function (d) {
-                        return (d.radius - 1) * 0.4;
-                    });
+                console.log(node);
 
                 force.on("tick", function () {
                     link.attr("x1", function (d) {
