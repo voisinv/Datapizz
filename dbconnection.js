@@ -3,6 +3,10 @@ var Firebase = require('firebase');
 
 var db = new Firebase('https://pizzaaa.firebaseio.com/');
 
+var articles = [];
+var tags = [];
+var links = [];
+
 // PRIVATE
 function getIndex(value) {
     var length = this.length;
@@ -37,6 +41,7 @@ var getLink = function (tags, allTags, links) {
 };
 
 var createLinks = function (result, dates) {
+    tags = _.values(result.tags);
     var articles = [];
     if (dates) {
         var tempArticles = _.values(result.articles);
@@ -44,7 +49,7 @@ var createLinks = function (result, dates) {
             if(tempArticles[i].date >= dates.beginDate && tempArticles[i].date < dates.endDate) {
                 articles.push(tempArticles[i]);
             } else {
-                updateLinks(tempArticles[i]);
+                updateTags(tempArticles[i]);
             }
         }
     } else {
@@ -54,7 +59,7 @@ var createLinks = function (result, dates) {
     var obj = {
         links: [],
         articles: articles,
-        tags: _.values(result.tags)
+        tags: tags
     };
 
     obj.articles.forEach(function (article) {
@@ -62,8 +67,21 @@ var createLinks = function (result, dates) {
             getLink(article.tags, obj.tags, obj.links);
         }
     });
-    return obj
+    return obj;
 };
+
+var updateTags = function(deletedArticle) {
+    for(var i=0; i<deletedArticle.tags.length; i++) {
+        var tagIndex = _.indexOf(tags, deletedArticle.tags[i]);
+        if (tagIndex >= 0) {
+            if (tags[tagIndex].radius < 5) {
+                //_.slice(tags, tagIndex, 1);
+            }
+            //tags[tagIndex].radius =  ? 0 : tag[tagIndex].radius - 5;
+        }
+    }
+};
+
 
 //PUBLIC
 var dbconnection = {
