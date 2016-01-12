@@ -4,19 +4,25 @@ html(ng-app='datapizz')
         link(rel='stylesheet', href='stylessheets/main.css')
 
     body(ng-controller='MainController as main')
-         md-toolbar(layout='row')
-            h1.md-toolbar-tools Datapizz
+        md-toolbar(layout='row')
+            a(href='').toolbar-logo
+                span.bar
+                span.bar
+                span.bar
+            h1.md-toolbar-tools.toolbar-title Datapizz
             span.flex
-            //span
-            //    md-slider(min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider").class
-            //    div(flex="20", layout-align="center center").layout
-            //        input(type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider")
-            //span.flex
             md-button(md-no-ink='md-no-ink', ng-if='!main.connected', ng-click='main.connect()') Se connecter
             md-button(md-no-ink='md-no-ink', ng-if='main.connected') Connect&eacute;
-
-         section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl', ng-if='main.connected')
-            main-graph.graph(collection='graphCtrl.entities', itemselected='')
+        section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl', ng-if='main.connected')
+            div.col-xs-12
+                section(layout='row')
+                    main-graph.graph(collection='graphCtrl.entities', itemselected='')
+                section(layout='row')
+                    md-datepicker(ng-model="graphCtrl.beginDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.endDate",
+                                    md-placeholder="Enter min date").datepicker
+                    md-datepicker(ng-model="graphCtrl.endDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.endDate",
+                                    md-placeholder="Enter max date").datepicker
+                    md-button(ng-click='graphCtrl.dateChanged()') Go !
 
 
     script(src='https://code.jquery.com/jquery-2.1.4.min.js')
@@ -36,6 +42,3 @@ html(ng-app='datapizz')
     script(src='javascripts/directives/MainGraph.js')
     script(src='javascripts/services/Entities.js')
     script(src='javascripts/services/Server.js')
-
-
-

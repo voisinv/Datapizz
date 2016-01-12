@@ -1,5 +1,6 @@
 
 var collection = function() {};
+
 collection.prototype.load = function(datas) {
     if(angular.isUndefined(datas)) throw new Error('entities is undefined');
     if(!angular.isArray(datas.links)) throw new Error('Links is not an array');
@@ -10,33 +11,46 @@ collection.prototype.load = function(datas) {
     this.articles = datas.articles;
     this.tags = datas.tags;
 };
+
 collection.prototype.get = function() {
     return this;
 };
 
+collection.prototype.clear = function() {
+    this.articles = [];
+    this.links = [];
+    this.tags = [];
+};
+
+
 function entities () {
-    var privateCollection;
+    var privateCollection = new collection();
+    var filteredCollection = new collection();
 
     this.load = function(datas, status) {
-        privateCollection = new collection();
         privateCollection.load(datas);
+        filteredCollection = angular.copy(privateCollection);
+
+        return status;
+    };
+
+    this.loadNewEntities = function(datas, status) {
+        filteredCollection.clear();
+        filteredCollection.load(datas);
+
         return status;
     };
 
     this.get = function() {
-        console.log('collec');
-        console.log(privateCollection);
-        return privateCollection;
+        return filteredCollection;
     }.bind(this);
 
     this.getMinDate = function() {
-        var articlesSortedByDate = _.sortByAll(privateCollection.articles, ['date']);
-        return articlesSortedByDate[0].date;
+        return _.first(_.sortByAll(privateCollection.articles, ['date'])).date;
     }.bind(this);
 
     this.getMaxDate = function() {
-        var articlesSortedByDate = _.sortByAll(privateCollection.articles, ['date']);
-        return articlesSortedByDate[articlesSortedByDate.length-1].date;
+        return _.last(_.sortByAll(privateCollection.articles, ['date'])).date;
     }.bind(this);
 }
 

@@ -12,3 +12,39 @@ body {
   stroke:#999;
   stroke-opacity:.6
 }
+
+.toolbar-title {
+  padding-left: 80px;
+}
+
+.md-datepicker-calendar {
+  background-color: white;
+  opacity: 1;
+  transition: opacity 0.2s
+}
+
+// toggle search left menu
+a.toolbar-logo {
+  display: block;
+  position: fixed;
+  top: 15px;
+  left: 25px;
+  z-index: 1000;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: all 500ms;
+  transition: all 500ms;
+}
+a.toolbar-logo .bar {
+  display: block;
+  width: 30px;
+  height: 4px;
+  margin: 6px auto;
+  background: rgba(0, 0, 0, 0.25);
+  -webkit-transition: all 500ms;
+  transition: all 500ms;
+}
+a.toolbar-logo:hover .bar {
+  background: white;
+}
