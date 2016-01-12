@@ -43,6 +43,8 @@ var createLinks = function (result, dates) {
         for(var i=0; i< tempArticles.length; i++) {
             if(tempArticles[i].date >= dates.beginDate && tempArticles[i].date < dates.endDate) {
                 articles.push(tempArticles[i]);
+            } else {
+                updateLinks(tempArticles[i]);
             }
         }
     } else {
@@ -77,9 +79,6 @@ var dbconnection = {
             res.status(200).send(obj);
         });
     }
-};
-
-var result = function (res, result) {
 };
 
 module.exports = dbconnection;

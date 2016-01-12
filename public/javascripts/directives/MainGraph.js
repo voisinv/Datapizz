@@ -59,7 +59,6 @@ function mainGraph($window, Entities) {
 
             scope.$on('datesChanged', function () {
                 console.log('datesChanged');
-                ctrl.entities = Entities.get();
                 update();
             });
 
@@ -133,6 +132,7 @@ function mainGraph($window, Entities) {
             }
 
             zoomListener(d3.select('#graph svg'));
+
             function update() {
 
                 var link = svg
@@ -188,7 +188,6 @@ function mainGraph($window, Entities) {
 
                 node.transition().duration(3000)
                     .attr('r', function(d) {
-                        //console.log(d);
                         return d.radius - 1;
                     });
 
@@ -203,8 +202,6 @@ function mainGraph($window, Entities) {
                     .text(function (d) {
                         return d.value
                     });*/
-
-                console.log(node);
 
                 force.on("tick", function () {
                     link.attr("x1", function (d) {

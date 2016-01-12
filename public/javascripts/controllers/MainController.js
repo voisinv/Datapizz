@@ -29,7 +29,9 @@ function MainGraphController(Server, Entities, $rootScope) {
             function() {
                 $rootScope.$broadcast('datesChanged');
             },
-            function() {}
+            function() {
+                console.log("erreur recompilation avec filtre date");
+            }
         );
     };
 }
