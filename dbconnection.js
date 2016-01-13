@@ -42,6 +42,7 @@ var getLink = function (tags, allTags, links) {
 
 var createLinks = function (result, dates) {
     tags = _.values(result.tags);
+    console.log(tags);
     var articles = [];
     if (dates) {
         var tempArticles = _.values(result.articles);
@@ -71,15 +72,26 @@ var createLinks = function (result, dates) {
 };
 
 var updateTags = function(deletedArticle) {
-    for(var i=0; i<deletedArticle.tags.length; i++) {
-        var tagIndex = _.indexOf(tags, deletedArticle.tags[i]);
-        if (tagIndex >= 0) {
-            if (tags[tagIndex].radius < 5) {
-                //_.slice(tags, tagIndex, 1);
+    deletedArticle.tags.forEach(function(tag) {
+        var tagIndex = -1;
+        for(var i = 0; i < tags.length; i++) {
+            if (tags[i].value === tag) {
+                tagIndex = i;
+                break;
             }
-            //tags[tagIndex].radius =  ? 0 : tag[tagIndex].radius - 5;
         }
-    }
+
+        if (tagIndex >= 0) {
+            console.log("radius current: " + tags[tagIndex].radius);
+            if (tags[tagIndex].radius <= 5) {
+                console.log("suppression - tag: " + tags[tagIndex].value);
+                tags.splice(tagIndex, 1);
+            } else {
+                console.log("radius down - tag: " + tags[tagIndex].value);
+                tags[tagIndex].radius -= 5;
+            }
+        }
+    });
 };
 
 
