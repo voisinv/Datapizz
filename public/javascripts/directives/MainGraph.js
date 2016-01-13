@@ -134,7 +134,11 @@ function mainGraph($window, Entities) {
             zoomListener(d3.select('#graph svg'));
 
             function update() {
-
+                updateLinks();
+                updateNodes();
+                updateForce();
+            }
+            function updateLinks() {
                 var link = svg
                     .selectAll(".link")
                     .data(ctrl.entities.links);
@@ -142,7 +146,6 @@ function mainGraph($window, Entities) {
                 link.enter()
                     .append("line")
                     .attr("class", "link")
-
                     .attr('opacity', function (d) {
                         return d.value / maxradiusline;
                     })
@@ -156,8 +159,8 @@ function mainGraph($window, Entities) {
                     });
 
                 link.exit().remove();
-
-
+            }
+            function updateNodes() {
                 node = svg.selectAll(".node")
                     .data(ctrl.entities.tags);
 
@@ -202,9 +205,10 @@ function mainGraph($window, Entities) {
                     .text(function (d) {
                         return d.value
                     });*/
-
+            }
+            function updateForce() {
                 force.on("tick", function () {
-                    link.attr("x1", function (d) {
+                    d3.selectAll(".link").attr("x1", function (d) {
                             return d.source.x;
                         })
                         .attr("y1", function (d) {
@@ -239,7 +243,6 @@ function mainGraph($window, Entities) {
                     .charge(function (d) {
                         return -1 * 170 * d.radius;
                     })
-
                     /*
                      .gravity(.01)
                      .charge(-80000)
@@ -249,8 +252,6 @@ function mainGraph($window, Entities) {
                      })
                      .size([w, h])*/
                     .start()
-
-
             }
         }
     };
