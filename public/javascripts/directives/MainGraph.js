@@ -40,6 +40,7 @@ function mainGraph($window, Entities) {
         controllerAs: 'ctrl',
         link: function (scope, elem, attrs, ctrl) {
             ctrl.entities = Entities.get();
+            var firstO = angular.copy(ctrl.entities);
             init();
             function updateListItem() {
                 ctrl.datas = ctrl.entities.articles.filter(function (e) {
@@ -60,7 +61,17 @@ function mainGraph($window, Entities) {
             scope.$on('datesChanged', function () {
                 console.log('datesChanged');
                 ctrl.entities = Entities.get();
-                update();
+                console.log(ctrl.entities);
+                //update();
+                console.log(node);
+                node.transition().duration(500).attr('r', function(d){
+                    return d.radius - 1;
+                });
+                link.transition().duration(3000)
+                    .style("stroke-width", function (d) {
+                        return d.value * 0.8;
+                    });
+
             });
 
             function init() {
@@ -93,25 +104,9 @@ function mainGraph($window, Entities) {
                 }).value;
 
                 update();
-                force.charge(170)
-                    .linkDistance(60)
-                    .size([w, h])
-                    .gravity(.2)
-                    .charge(function (d) {
-                        return -1 * 170 * d.radius;
-                    })
-                    /*
-                     .gravity(.01)
-                     .charge(-80000)
-                     .friction(0)
-                     .linkDistance(function (d) {
-                     return d.value * 10
-                     })
-                     .size([w, h])*/
-                    .start()
             }
 
-            var node, circle;
+            var node, circle, link;
 
             function zoom() {
                 node.attr("transform", transform);
@@ -122,7 +117,8 @@ function mainGraph($window, Entities) {
                 return "translate(" + x(d[0]) + "," + y(d[1]) + ")";
             }
 
-            var zoomListener = d3.behavior.zoom()
+            var zoomListener = d3
+                .behavior.zoom()
                 .scaleExtent([0.1, 3])
                 .on("zoom", zoomHandler);
 
@@ -135,7 +131,7 @@ function mainGraph($window, Entities) {
             zoomListener(d3.select('#graph svg'));
             function update() {
 
-                var link = svg
+                link = svg
                     .selectAll(".link")
                     .data(ctrl.entities.links);
 
@@ -155,18 +151,26 @@ function mainGraph($window, Entities) {
                         return d.value * 0.8;
                     });
 
-                link.exit().remove();
+                //link.exit().remove();
 
 
-                node = svg.selectAll(".node")
+
+
+                node = svg
+                    .selectAll(".node")
                     .data(ctrl.entities.tags);
 
                 node.enter()
-                    .append('g')
+                    //.append('g')
+                    .append('circle')
                     .attr('fill', 'black')
-                    .call(force.drag);
+                    .call(force.drag)
 
-                node.append('circle')
+                //node.exit().remove();
+
+
+                //node
+                    //.append('circle')
                     .attr('class', 'node')
                     .attr("r", function (d) {
                         return (d.radius - 1);//0.4;
@@ -186,12 +190,6 @@ function mainGraph($window, Entities) {
                         ctrl.toggleRight();
                     });
 
-                node.transition().duration(3000)
-                    .attr('r', function(d) {
-                        //console.log(d);
-                        return d.radius - 1;
-                    });
-
                 /*node.append("text")
                     .attr("dx", function (d) {
                         return d.radius - 1
@@ -204,7 +202,10 @@ function mainGraph($window, Entities) {
                         return d.value
                     });*/
 
-                console.log(node);
+
+                link.exit().remove();
+                node.exit().remove();
+
 
                 force.on("tick", function () {
                     link.attr("x1", function (d) {
@@ -227,13 +228,14 @@ function mainGraph($window, Entities) {
                         .attr("cy", function (d) {
                             return d.y;
                         });
+                    /*
                     d3.selectAll("text")
                         .attr("x", function (d) {
                             return d.x + d.radius / 2;
                         })
                         .attr("y", function (d) {
                             return d.y;
-                        });
+                        });*/
                 });
                 force.charge(170)
                     .linkDistance(60)
@@ -242,6 +244,7 @@ function mainGraph($window, Entities) {
                     .charge(function (d) {
                         return -1 * 170 * d.radius;
                     })
+                    .start();
 
                     /*
                      .gravity(.01)
@@ -251,7 +254,6 @@ function mainGraph($window, Entities) {
                      return d.value * 10
                      })
                      .size([w, h])*/
-                    .start()
 
 
             }
