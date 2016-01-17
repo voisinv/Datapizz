@@ -20,7 +20,6 @@ function MainGraphController(Server, Entities, $rootScope) {
     self.display = function() {
         self.collectionReady = true;
     };
-
     self.dateChanged = function() {
         Server.getEntities({
             beginDate: moment(self.beginDate).valueOf(),
@@ -29,11 +28,14 @@ function MainGraphController(Server, Entities, $rootScope) {
             function() {
                 $rootScope.$broadcast('datesChanged');
             },
-            function() {}
+            function() {
+                console.error("erreur recompilation avec filtre date");
+            }
         );
     };
 }
 
-angular.module('datapizz.controllers')
+angular
+    .module('datapizz.controllers')
     .controller('MainController', MainController)
     .controller('MainGraphController', MainGraphController);

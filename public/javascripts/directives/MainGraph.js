@@ -39,8 +39,7 @@ function mainGraph($window, Entities) {
         },
         controllerAs: 'ctrl',
         link: function (scope, elem, attrs, ctrl) {
-            ctrl.entities = Entities.get();
-            var firstO = angular.copy(ctrl.entities);
+            ctrl.entities = angular.copy(Entities.get());
             init();
             function updateListItem() {
                 ctrl.datas = ctrl.entities.articles.filter(function (e) {
@@ -59,18 +58,17 @@ function mainGraph($window, Entities) {
             var x, y;
 
             scope.$on('datesChanged', function () {
-                console.log('datesChanged');
-                ctrl.entities = Entities.get();
+                ctrl.entities.tags = angular.copy(Entities.get().tags);
+                ctrl.entities.links = angular.copy(Entities.get().links);
                 console.log(ctrl.entities);
-                //update();
-                console.log(node);
-                node.transition().duration(500).attr('r', function(d){
-                    return d.radius - 1;
-                });
-                link.transition().duration(3000)
-                    .style("stroke-width", function (d) {
-                        return d.value * 0.8;
-                    });
+                update();
+                //node.transition().duration(500).attr('r', function(d){
+                //    return d.radius - 1;
+                //});
+                //link.transition().duration(3000)
+                //    .style("stroke-width", function (d) {
+                //        return d.value * 0.8;
+                //    });
 
             });
 
@@ -93,7 +91,13 @@ function mainGraph($window, Entities) {
 
                 force = d3.layout.force()
                     .nodes(ctrl.entities.tags)
-                    .links(ctrl.entities.links);
+                    .links(ctrl.entities.links)
+                    .linkDistance(60)
+                    .size([w, h])
+                    .gravity(.2)
+                    .charge(function (d) {
+                        return -1 * 170 * d.radius;
+                    });
 
                 maxradiuscircle = _.max(ctrl.entities.tags, function (d) {
                     return d.radius;
@@ -104,6 +108,9 @@ function mainGraph($window, Entities) {
                 }).value;
 
                 update();
+
+                force
+                    .start();
             }
 
             var node, circle, link;
@@ -129,52 +136,41 @@ function mainGraph($window, Entities) {
             }
 
             zoomListener(d3.select('#graph svg'));
+
             function update() {
+
 
                 link = svg
                     .selectAll(".link")
                     .data(ctrl.entities.links);
-
-                link.enter()
-                    .append("line")
-                    .attr("class", "link")
-
-                    .attr('opacity', function (d) {
-                        return d.value / maxradiusline;
-                    })
-                    .style("stroke-width", function (d) {
-                        return d.value * 0.8;
-                    });
-
-                link.transition().duration(3000)
-                    .style("stroke-width", function (d) {
-                        return d.value * 0.8;
-                    });
-
-                //link.exit().remove();
-
-
-
-
                 node = svg
                     .selectAll(".node")
                     .data(ctrl.entities.tags);
 
-                node.enter()
+                console.log(link, node);
+                link.enter()
+                    .append("line")
+                    .attr("class", "link")
+                    .attr('opacity', function (d) {
+                        return d.value / maxradiusline;
+                    })
+
+
+
+
+
+
+                node
+                    .enter()
                     //.append('g')
                     .append('circle')
                     .attr('fill', 'black')
                     .call(force.drag)
 
-                //node.exit().remove();
 
-
-                //node
+                    //node
                     //.append('circle')
                     .attr('class', 'node')
-                    .attr("r", function (d) {
-                        return (d.radius - 1);//0.4;
-                    })
                     .attr("id", function (d) {
                         return 'circle-' + d.value;
                     })
@@ -190,17 +186,32 @@ function mainGraph($window, Entities) {
                         ctrl.toggleRight();
                     });
 
+
+                node
+                    .attr("r", function (d) {
+                        return (d.radius - 1);//0.4;
+                    })
+                    .attr("id", function (d) {
+                        return 'circle-' + d.value;
+                    })
+                    .style("fill", function () {
+                        return '#3498db'
+                    });
+
+                link.style("stroke-width", function (d) {
+                    return d.value * 0.8;
+                });
                 /*node.append("text")
-                    .attr("dx", function (d) {
-                        return d.radius - 1
-                    })
-                    .attr("dy", ".35em")
-                    .attr('opacity', function (d) {
-                        return (d.radius / maxradiuscircle).toFixed(2) * 4;
-                    })
-                    .text(function (d) {
-                        return d.value
-                    });*/
+                 .attr("dx", function (d) {
+                 return d.radius - 1
+                 })
+                 .attr("dy", ".35em")
+                 .attr('opacity', function (d) {
+                 return (d.radius / maxradiuscircle).toFixed(2) * 4;
+                 })
+                 .text(function (d) {
+                 return d.value
+                 });*/
 
 
                 link.exit().remove();
@@ -208,9 +219,9 @@ function mainGraph($window, Entities) {
 
 
                 force.on("tick", function () {
-                    link.attr("x1", function (d) {
-                            return d.source.x;
-                        })
+                    d3.selectAll(".link").attr("x1", function (d) {
+                        return d.source.x;
+                    })
                         .attr("y1", function (d) {
                             return d.source.y;
                         })
@@ -229,33 +240,14 @@ function mainGraph($window, Entities) {
                             return d.y;
                         });
                     /*
-                    d3.selectAll("text")
-                        .attr("x", function (d) {
-                            return d.x + d.radius / 2;
-                        })
-                        .attr("y", function (d) {
-                            return d.y;
-                        });*/
-                });
-                force.charge(170)
-                    .linkDistance(60)
-                    .size([w, h])
-                    .gravity(.2)
-                    .charge(function (d) {
-                        return -1 * 170 * d.radius;
-                    })
-                    .start();
-
-                    /*
-                     .gravity(.01)
-                     .charge(-80000)
-                     .friction(0)
-                     .linkDistance(function (d) {
-                     return d.value * 10
+                     d3.selectAll("text")
+                     .attr("x", function (d) {
+                     return d.x + d.radius / 2;
                      })
-                     .size([w, h])*/
-
-
+                     .attr("y", function (d) {
+                     return d.y;
+                     });*/
+                });
             }
         }
     };

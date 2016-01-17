@@ -3,6 +3,10 @@ var Firebase = require('firebase');
 
 var db = new Firebase('https://pizzaaa.firebaseio.com/');
 
+var articles = [];
+var tags = [];
+var links = [];
+
 // PRIVATE
 function getIndex(value) {
     var length = this.length;
@@ -36,23 +40,33 @@ var getLink = function (tags, allTags, links) {
     }
 };
 
-var createLinks = function (result, dates) {
-    var articles = [];
-    if (dates) {
-        var tempArticles = _.values(result.articles);
-        for(var i=0; i< tempArticles.length; i++) {
-            if(tempArticles[i].date >= dates.beginDate && tempArticles[i].date < dates.endDate) {
-                articles.push(tempArticles[i]);
-            }
-        }
-    } else {
-        articles = _.values(result.articles);
-    }
+/**
+ * Create a tags object from articles
+ * @param articles
+ * @returns [{radius: count * 5, value: ''}, ...]
+ */
+function getTags(articles) {
+    return _(articles)
+        .chain()
+        .map('tags')
+        .flatten()
+        .countBy()
+        .map(function(count, name){
+            return {radius: count * 5, value: name}
+        })
+        .value()
+}
 
+var createLinks = function (oArticles) {
+    console.log(oArticles.length);
+    tags = getTags(oArticles);
+    var articles = [];
+
+    articles = oArticles;
     var obj = {
         links: [],
         articles: articles,
-        tags: _.values(result.tags)
+        tags: tags
     };
 
     obj.articles.forEach(function (article) {
@@ -60,26 +74,46 @@ var createLinks = function (result, dates) {
             getLink(article.tags, obj.tags, obj.links);
         }
     });
-    return obj
+    return obj;
 };
+
+var updateTags = function(deletedArticle) {
+    deletedArticle.tags.forEach(function(tag) {
+        var tagIndex = -1;
+        for(var i = 0; i < tags.length; i++) {
+            if (tags[i].value === tag) {
+                tagIndex = i;
+                break;
+            }
+        }
+
+        if (tagIndex >= 0) {
+            if (tags[tagIndex].radius <= 5) {
+                tags.splice(tagIndex, 1);
+            } else {
+                tags[tagIndex].radius -= 5;
+            }
+        }
+    });
+};
+
 
 //PUBLIC
 var dbconnection = {
     get: function (res, name) {
         db.once('value', function (s) {
-            var obj = createLinks(s.val());
+            var obj = createLinks(_.values(s.val().articles));
             res.status(200).send(obj);
         });
     },
     getNewEntities: function (dates, res) {
         db.once('value', function (s) {
-            var obj = createLinks(s.val(), dates);
+            var obj = createLinks(_.values(s.val().articles).filter(function(e) {
+                return e.date >= dates.beginDate && e.date <= dates.endDate;
+            }));
             res.status(200).send(obj);
         });
     }
-};
-
-var result = function (res, result) {
 };
 
 module.exports = dbconnection;
