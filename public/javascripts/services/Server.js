@@ -27,7 +27,7 @@ function server($http, Entities) {
   function getEntities(dates) {
     return $http.post(ENTITIES, dates).then(
       function(res) {
-        return Entities.loadNewEntities(res.data, res.status);
+        return Entities.load(res.data, res.status);
       },
       function(errors) {
       }

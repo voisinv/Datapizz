@@ -24,35 +24,40 @@ collection.prototype.clear = function() {
 
 
 function entities () {
-    var privateCollection = new collection();
-    var filteredCollection = new collection();
+    var self = this;
+    self.privateCollection = new collection();
+    self.minDate = moment();
+    self.maxDate = moment();
 
     this.load = function(datas, status) {
-        privateCollection.load(datas);
-        filteredCollection = angular.copy(privateCollection);
+        self.privateCollection.load(datas);
+        self.setMinDate(_.first(_.sortByAll(self.privateCollection.articles, ['date'])).date);
+        self.setMaxDate(_.last(_.sortByAll(self.privateCollection.articles, ['date'])).date);
 
         return status;
     };
 
-    this.loadNewEntities = function(datas, status) {
-        filteredCollection.clear();
-        filteredCollection.load(datas);
-
-        return status;
+    self.get = function() {
+        return self.privateCollection;
     };
 
-    this.get = function() {
-        return filteredCollection;
-    }.bind(this);
+    self.getMinDate = function() {
+        return self.minDate;
+    };
 
-    this.getMinDate = function() {
-        return _.first(_.sortByAll(privateCollection.articles, ['date'])).date;
-    }.bind(this);
+    self.setMinDate = function(minDate) {
+        self.minDate = minDate;
+    };
 
-    this.getMaxDate = function() {
-        return _.last(_.sortByAll(privateCollection.articles, ['date'])).date;
-    }.bind(this);
+    self.getMaxDate = function() {
+        return self.maxDate;
+    };
+
+    self.setMaxDate = function(maxDate) {
+        self.maxDate = maxDate;
+    };
 }
 
-angular.module('datapizz.services')
+angular
+    .module('datapizz.services')
     .service('Entities', entities);

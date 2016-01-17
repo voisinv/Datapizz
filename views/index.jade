@@ -18,9 +18,9 @@ html(ng-app='datapizz')
                 section(layout='row')
                     main-graph.graph(collection='graphCtrl.entities', itemselected='')
                 section(layout='row')
-                    md-datepicker(ng-model="graphCtrl.beginDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.endDate",
+                    md-datepicker(ng-model="graphCtrl.beginDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.maxDate",
                                     md-placeholder="Enter min date").datepicker
-                    md-datepicker(ng-model="graphCtrl.endDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.endDate",
+                    md-datepicker(ng-model="graphCtrl.endDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.maxDate",
                                     md-placeholder="Enter max date").datepicker
                     md-button(ng-click='graphCtrl.dateChanged()') Go !
 

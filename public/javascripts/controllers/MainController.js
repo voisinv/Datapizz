@@ -12,9 +12,12 @@ function MainController(Server) {
 function MainGraphController(Server, Entities, $rootScope) {
     var self = this;
 
-    self.beginDate = moment(Entities.getMinDate()).toDate();
-    self.minDate = moment(self.beginDate).subtract(1, 'days').toDate();
-    self.endDate = moment(Entities.getMaxDate()).toDate();
+    self.minDate = moment(Entities.getMinDate()).subtract(1, 'days').toDate();
+    self.maxDate = moment(Entities.getMaxDate()).toDate();
+
+    self.beginDate = self.minDate;
+    self.endDate = self.maxDate;
+
     self.collectionReady = false;
 
     self.display = function() {
