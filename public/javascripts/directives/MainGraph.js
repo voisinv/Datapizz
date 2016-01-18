@@ -82,7 +82,7 @@ function mainGraph($window, Entities) {
                     .range([$window.innerHeight, 0]);
 
                 w = $window.innerWidth * 0.8;
-                h = $window.innerHeight * 0.94;
+                h = $window.innerHeight * 0.90;
                 a = d3.select('#graph').append("svg");
                 svg = a.attr("width", w)
                     .attr("height", h - 64)

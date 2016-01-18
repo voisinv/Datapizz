@@ -26,13 +26,15 @@ collection.prototype.clear = function() {
 function entities () {
     var self = this;
     self.privateCollection = new collection();
-    self.minDate = moment();
-    self.maxDate = moment();
+    self.minDate = null;
+    self.maxDate = null;
 
     this.load = function(datas, status) {
         self.privateCollection.load(datas);
-        self.setMinDate(_.first(_.sortByAll(self.privateCollection.articles, ['date'])).date);
-        self.setMaxDate(_.last(_.sortByAll(self.privateCollection.articles, ['date'])).date);
+        if(self.minDate === null && self.maxDate === null) {
+            self.setMinDate(_.first(_.sortByAll(self.privateCollection.articles, ['date'])).date);
+            self.setMaxDate(_.last(_.sortByAll(self.privateCollection.articles, ['date'])).date);
+        }
 
         return status;
     };

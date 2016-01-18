@@ -17,12 +17,21 @@ html(ng-app='datapizz')
             div.col-xs-12
                 section(layout='row')
                     main-graph.graph(collection='graphCtrl.entities', itemselected='')
-                section(layout='row')
-                    md-datepicker(ng-model="graphCtrl.beginDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.maxDate",
-                                    md-placeholder="Enter min date").datepicker
-                    md-datepicker(ng-model="graphCtrl.endDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.maxDate",
-                                    md-placeholder="Enter max date").datepicker
-                    md-button(ng-click='graphCtrl.dateChanged()') Go !
+                section(layout='row', layout-align="center center" layout-wrap)
+                    //-
+                        md-datepicker(ng-model="graphCtrl.beginDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.maxDate",
+                                        md-placeholder="Enter min date").datepicker
+                        md-datepicker(ng-model="graphCtrl.endDate", md-min-date="graphCtrl.minDate", md-max-date="graphCtrl.maxDate",
+                                        md-placeholder="Enter max date").datepicker
+                    md-input-container(flex-gt-sm).md-block
+                        label Date de début
+                        input(ng-model="graphCtrl.beginDate")
+                    md-input-container(flex-gt-sm).md-block
+                        label Date de fin
+                        input(ng-model="graphCtrl.endDate")
+                    p
+                        strong {{'min: ' + graphCtrl.minDate + ' => max: ' + graphCtrl.maxDate}}
+                    md-button(ng-click='graphCtrl.dateChanged()').md-primary.md-raised Go !
 
 
     script(src='https://code.jquery.com/jquery-2.1.4.min.js')

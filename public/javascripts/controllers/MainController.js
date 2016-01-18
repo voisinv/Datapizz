@@ -12,8 +12,8 @@ function MainController(Server) {
 function MainGraphController(Server, Entities, $rootScope) {
     var self = this;
 
-    self.minDate = moment(Entities.getMinDate()).subtract(1, 'days').toDate();
-    self.maxDate = moment(Entities.getMaxDate()).toDate();
+    self.minDate = moment(Entities.getMinDate()).subtract(1, 'days').format('DD/MM/YYYY');
+    self.maxDate = moment(Entities.getMaxDate()).format('DD/MM/YYYY');
 
     self.beginDate = self.minDate;
     self.endDate = self.maxDate;
@@ -25,8 +25,8 @@ function MainGraphController(Server, Entities, $rootScope) {
     };
     self.dateChanged = function() {
         Server.getEntities({
-            beginDate: moment(self.beginDate).valueOf(),
-            endDate: moment(self.endDate).valueOf()
+            beginDate: moment(self.beginDate, 'DD/MM/YYYY').valueOf(),
+            endDate: moment(self.endDate, 'DD/MM/YYYY').valueOf()
         }).then(
             function() {
                 $rootScope.$broadcast('datesChanged');
