@@ -58,8 +58,7 @@ function mainGraph($window, Entities) {
             var x, y;
 
             scope.$on('datesChanged', function () {
-                ctrl.entities.tags = angular.copy(Entities.get().tags);
-                ctrl.entities.links = angular.copy(Entities.get().links);
+                ctrl.entities = angular.copy(Entities.get());
                 console.log(ctrl.entities);
                 update();
                 //node.transition().duration(500).attr('r', function(d){
@@ -153,7 +152,7 @@ function mainGraph($window, Entities) {
                     .attr("class", "link")
                     .attr('opacity', function (d) {
                         return d.value / maxradiusline;
-                    })
+                    });
 
 
 

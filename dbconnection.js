@@ -3,10 +3,6 @@ var Firebase = require('firebase');
 
 var db = new Firebase('https://pizzaaa.firebaseio.com/');
 
-var articles = [];
-var tags = [];
-var links = [];
-
 // PRIVATE
 function getIndex(value) {
     var length = this.length;
@@ -52,21 +48,17 @@ function getTags(articles) {
         .flatten()
         .countBy()
         .map(function(count, name){
+            /// TODO : la categorie ?
             return {radius: count * 5, value: name}
         })
         .value()
 }
 
-var createLinks = function (oArticles) {
-    console.log(oArticles.length);
-    tags = getTags(oArticles);
-    var articles = [];
-
-    articles = oArticles;
+var createLinks = function (articles) {
     var obj = {
         links: [],
         articles: articles,
-        tags: tags
+        tags: getTags(articles)
     };
 
     obj.articles.forEach(function (article) {
@@ -77,36 +69,15 @@ var createLinks = function (oArticles) {
     return obj;
 };
 
-var updateTags = function(deletedArticle) {
-    deletedArticle.tags.forEach(function(tag) {
-        var tagIndex = -1;
-        for(var i = 0; i < tags.length; i++) {
-            if (tags[i].value === tag) {
-                tagIndex = i;
-                break;
-            }
-        }
-
-        if (tagIndex >= 0) {
-            if (tags[tagIndex].radius <= 5) {
-                tags.splice(tagIndex, 1);
-            } else {
-                tags[tagIndex].radius -= 5;
-            }
-        }
-    });
-};
-
-
 //PUBLIC
 var dbconnection = {
-    get: function (res, name) {
+    getEntities: function (res) {
         db.once('value', function (s) {
             var obj = createLinks(_.values(s.val().articles));
             res.status(200).send(obj);
         });
     },
-    getNewEntities: function (dates, res) {
+    getFilteredEntities: function (dates, res) {
         db.once('value', function (s) {
             var obj = createLinks(_.values(s.val().articles).filter(function(e) {
                 return e.date >= dates.beginDate && e.date <= dates.endDate;

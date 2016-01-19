@@ -38,13 +38,11 @@ app.get('/partials/:name', function (req, res) {
   var name = req.params.name;
   res.render('partials/' + name);
 });
-app.use('/api', function(req, res) {
-  entities.get(res);
-  //res.status(200).send(ent);
-});
 app.use('/entities', function(req, res) {
-  entities.getNewEntities(req.body, res);
-  //res.status(200).send(ent);
+  entities.getEntities(res);
+});
+app.use('/filteredEntities', function(req, res) {
+  entities.getFilteredEntities(req.body, res);
 });
 
 // catch 404 and forward to error handler
