@@ -97,7 +97,7 @@ var dbconnection = {
 
       res.status(200).send(result);
     });
-  }/*,
+  },
   getTagsLinksCSV : function(res) {
     db.once('value', function(s) {
       var tagsLinks = getTagsLinks(s.val());
@@ -116,7 +116,7 @@ var dbconnection = {
 
       res.status(200).send(result);
     });
-  }*/
+  }
 };
 
 module.exports = dbconnection;
