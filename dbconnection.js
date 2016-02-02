@@ -43,12 +43,11 @@ var getTagsList = function(result) {
   articles.forEach(function(article) {
     if(article.tags && article.tags.length > 0) {
       article.tags.forEach(function (tag) {
-        var tempTag = _.findWhere(tagsList, {value: tag.value});
-
+        var tempTag = _.findWhere(tagsList, {value: tag});
         if (tempTag) {
           tempTag.weight++;
         } else {
-          tagsList.push({value: tag.value, weight: 1});
+          tagsList.push({value: tag, weight: 1});
         }
       });
     }
@@ -98,15 +97,15 @@ var dbconnection = {
 
       res.status(200).send(result);
     });
-  },
+  }/*,
   getTagsLinksCSV : function(res) {
     db.once('value', function(s) {
-      var obj = createLinks(s.val());
+      var tagsLinks = getTagsLinks(s.val());
       var fields = ['source', 'target'];
       var myData = [];
       var result;
 
-      obj.links.forEach(function(link) {
+      tagsLinks.links.forEach(function(link) {
         myData.push({'source': link.source, 'target': link.target});
       });
 
@@ -117,7 +116,7 @@ var dbconnection = {
 
       res.status(200).send(result);
     });
-  }
+  }*/
 };
 
 module.exports = dbconnection;

@@ -39,9 +39,9 @@ app.use('/api', function(req, res) {
 app.get('/tagsListCSV', function(req, res) {
   entities.getTagsListCSV(res);
 });
-app.get('/tagsLinksCSV', function(req, res) {
+/*app.get('/tagsLinksCSV', function(req, res) {
   entities.getTagsLinksCSV(res);
-});
+});*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
