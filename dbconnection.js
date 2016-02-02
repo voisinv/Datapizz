@@ -16,7 +16,7 @@ var getId = function(value) {
   return getIndex.call(this, value);
 };
 
-var getLink = function(tags, allTags, links) {
+var getLinkWithWeight = function(tags, allTags, links) {
   var numberOfTags = tags.length;
   for(var fIt = 0; fIt < numberOfTags; fIt++) {
     for(var sIt = fIt + 1; sIt < numberOfTags; sIt++) {
@@ -32,6 +32,32 @@ var getLink = function(tags, allTags, links) {
           target: idTarget,
           value: 3})
       }
+    }
+  }
+};
+
+var getTagsLinks = function(result) {
+    var obj = {
+        links: [],
+        articles : _.values(result.articles),
+        tags : _.values(result.tags)
+    };
+
+    obj.articles.forEach(function(article) {
+        if(article.tags && article.tags.length) {
+            getLinkWithoutWeightForCSV(article.tags, obj.tags, obj.links);
+        }
+    });
+    return obj
+};
+var getLinkWithoutWeightForCSV = function(tags, allTags, links) {
+  var numberOfTags = tags.length;
+  for(var fIt = 0; fIt < numberOfTags; fIt++) {
+    for(var sIt = fIt + 1; sIt < numberOfTags; sIt++) {
+      links.push({
+        source: tags[fIt],
+        target: tags[sIt]
+      });
     }
   }
 };
@@ -65,7 +91,7 @@ var createLinks = function(result) {
 
   obj.articles.forEach(function(article) {
     if(article.tags && article.tags.length) {
-      getLink(article.tags, obj.tags, obj.links);
+      getLinkWithWeight(article.tags, obj.tags, obj.links);
     }
   });
   return obj
