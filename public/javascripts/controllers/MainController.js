@@ -1,9 +1,40 @@
-function MainController($scope, Server) {
+function MainController($scope, Server, $http) {
   var self = this;
   self.connected = false;
 
   self.connect = function() {
     Server.connect().then(function(){self.connected = true;})
+  };
+  self.getTagsListCSV = function() {
+    $http.get('/tagsListCSV').then(
+      function(data) {
+        console.log('success');
+
+        // crade ! seul moyen de créer un csv : http://stackoverflow.com/questions/20300547/download-csv-file-from-web-api-in-angular-js
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:attachment/csv,' + encodeURI(data.data);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'tagsList.csv';
+        hiddenElement.click();
+      },
+      function(err) {
+        console.log(err);
+      });
+  };
+  self.getTagsLinksCSV = function() {
+    $http.get('/tagsLinksCSV').then(
+      function(data) {
+        console.log('success');
+
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:attachment/csv,' + encodeURI(data.data);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'tagsLinks.csv';
+        hiddenElement.click();
+      },
+      function(err) {
+        console.log(err);
+      });
   };
 
 }

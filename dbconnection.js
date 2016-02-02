@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var Firebase = require('firebase');
+var json2csv = require('json2csv');
 
 var db = new Firebase('https://pizzaaa.firebaseio.com/');
 
@@ -35,6 +36,26 @@ var getLink = function(tags, allTags, links) {
   }
 };
 
+var getTagsList = function(result) {
+  var tagsList = [];
+  var articles = _.values(result.articles);
+
+  articles.forEach(function(article) {
+    if(article.tags && article.tags.length > 0) {
+      article.tags.forEach(function (tag) {
+        var tempTag = _.findWhere(tagsList, {value: tag});
+        if (tempTag) {
+          tempTag.weight++;
+        } else {
+          tagsList.push({value: tag, weight: 1});
+        }
+      });
+    }
+  });
+
+  return tagsList;
+};
+
 var createLinks = function(result) {
   var obj = {
     links: [],
@@ -43,7 +64,7 @@ var createLinks = function(result) {
   };
 
   obj.articles.forEach(function(article) {
-    if(article.tags.length) {
+    if(article.tags && article.tags.length) {
       getLink(article.tags, obj.tags, obj.links);
     }
   });
@@ -52,15 +73,50 @@ var createLinks = function(result) {
 
 //PUBLIC
 var dbconnection = {
-    get : function(res, name) {
-      db.once('value', function(s) {
-        var obj = createLinks(s.val());
-        res.status(200).send(obj);
-      });
-    }
-};
+  get : function(res) {
+    db.once('value', function(s) {
+      var obj = createLinks(s.val());
+      res.status(200).send(obj);
+    });
+  },
+  getTagsListCSV : function(res) {
+    db.once('value', function(s) {
+      var tagsList = getTagsList(s.val());
+      var fields = ['tag', 'idTag', 'weight'];
+      var myData = [];
+      var result;
 
-var result = function (res, result) {
+      tagsList.forEach(function(tag, i) {
+        myData.push({'tag': tag.value, 'idTag': i, 'weight': tag.weight});
+      });
+
+      json2csv({ data: myData, fields: fields }, function(err, csv) {
+        if (err) console.log(err);
+        result = csv;
+      });
+
+      res.status(200).send(result);
+    });
+  }/*,
+  getTagsLinksCSV : function(res) {
+    db.once('value', function(s) {
+      var tagsLinks = getTagsLinks(s.val());
+      var fields = ['source', 'target'];
+      var myData = [];
+      var result;
+
+      tagsLinks.links.forEach(function(link) {
+        myData.push({'source': link.source, 'target': link.target});
+      });
+
+      json2csv({ data: myData, fields: fields }, function(err, csv) {
+        if (err) console.log(err);
+        result = csv;
+      });
+
+      res.status(200).send(result);
+    });
+  }*/
 };
 
 module.exports = dbconnection;
