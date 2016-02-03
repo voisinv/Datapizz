@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var Firebase = require('firebase');
 var json2csv = require('json2csv');
+var moment = require('moment');
 
 var db = new Firebase('https://pizzaaa.firebaseio.com/');
 
@@ -45,18 +46,20 @@ var getTagsLinks = function(result) {
 
     obj.articles.forEach(function(article) {
         if(article.tags && article.tags.length) {
-            getLinkWithoutWeightForCSV(article.tags, obj.tags, obj.links);
+            getLinkWithoutWeightForCSV(article.tags, obj.tags, obj.links, article.date);
         }
     });
     return obj
 };
-var getLinkWithoutWeightForCSV = function(tags, allTags, links) {
+var getLinkWithoutWeightForCSV = function(tags, allTags, links, dateMillis) {
   var numberOfTags = tags.length;
+  var date = moment(dateMillis).format('DD/MM/YYYY');
   for(var fIt = 0; fIt < numberOfTags; fIt++) {
     for(var sIt = fIt + 1; sIt < numberOfTags; sIt++) {
       links.push({
         source: tags[fIt],
-        target: tags[sIt]
+        target: tags[sIt],
+        date: date
       });
     }
   }
@@ -127,12 +130,12 @@ var dbconnection = {
   getTagsLinksCSV : function(res) {
     db.once('value', function(s) {
       var tagsLinks = getTagsLinks(s.val());
-      var fields = ['source', 'target'];
+      var fields = ['source', 'target', 'date'];
       var myData = [];
       var result;
 
       tagsLinks.links.forEach(function(link) {
-        myData.push({'source': link.source, 'target': link.target});
+        myData.push({'source': link.source, 'target': link.target, 'date': link.date});
       });
 
       json2csv({ data: myData, fields: fields }, function(err, csv) {
