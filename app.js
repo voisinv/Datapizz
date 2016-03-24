@@ -42,6 +42,9 @@ app.get('/tagsListCSV', function(req, res) {
 app.get('/tagsLinksCSV', function(req, res) {
   entities.getTagsLinksCSV(res);
 });
+app.get('/tagUrls/:tag', function(req, res) {
+  entities.getUlsFromTag(res, req.params.tag);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -4,17 +4,30 @@ html(ng-app='datapizz')
         link(rel='stylesheet', href='stylessheets/main.css')
 
     body(ng-controller='MainController as main')
-         md-toolbar(layout='row')
+        md-toolbar(layout='row')
             h1.md-toolbar-tools Datapizz
             span.flex
             md-button(md-no-ink='md-no-ink', ng-click='main.getTagsLinksCSV()') Links
             md-button(md-no-ink='md-no-ink', ng-click='main.getTagsListCSV()') Tags
-            md-button(md-no-ink='md-no-ink', ng-if='!main.connected', ng-click='main.connect()') connexion
+            //md-button(md-no-ink='md-no-ink', ng-if='!main.connected', ng-click='main.connect()') connexion
+            //md-button(md-no-ink='md-no-ink', ng-if='main.connected') Connect&eacute;
 
-            md-button(md-no-ink='md-no-ink', ng-if='main.connected') Connect&eacute;
+        section(layout='row', ng-if='!main.displaySearchedTag', style='padding: 10px;')
+            label(flex='10') tag :
+            input(type='text', ng-model='main.tagToSearch', flex='20')
+            md-button(md-no-ink='md-no-ink', ng-click='main.tagDetails()').md-raised Get URLs
+        section(layout='column', ng-if='main.displaySearchedTag', style='padding: 10px;')
+            h1 Tag : {{main.searchedTag}}
+            md-divider
+            div(ng-repeat='domain in main.domains', layout='row', layout-align='center center', style='height: 38px;margin-bottom: 10px;')
+                div(flex='50') {{domain.title}}
+                div(flex='50') {{domain.url}}
+            md-divider
+            div(layout='row', layout-align='center')
+                md-button(md-no-ink='md-no-ink', ng-click='main.returnToTagForm()', flex='20').md-raised Retour
 
-         section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl', ng-if='main.connected')
-            main-graph.graph(collection='graphCtrl.entities', itemselected='')
+        //section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl', ng-if='main.connected')
+        //   main-graph.graph(collection='graphCtrl.entities', itemselected='')
 
 
     script(src='https://code.jquery.com/jquery-2.1.4.min.js')

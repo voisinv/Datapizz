@@ -2,6 +2,11 @@ function MainController($scope, Server, $http) {
   var self = this;
   self.connected = false;
 
+  self.displaySearchedTag = false;
+  self.tagToSearch = '';
+  self.searchedTag = '';
+  self.domains = [];
+
   self.connect = function() {
     Server.connect().then(function(){self.connected = true;})
   };
@@ -36,7 +41,29 @@ function MainController($scope, Server, $http) {
         console.log(err);
       });
   };
-
+  self.tagDetails = function() {
+    self.displaySearchedTag = false;
+    var url = '/tagUrls/' + self.tagToSearch;
+    $http.get(url).then(
+        function(data) {
+          // success
+          console.log('tag ' + self.tagToSearch + ' - success');
+          self.displaySearchedTag = true;
+          self.searchedTag = data.data.tag;
+          self.domains = data.data.domains;
+        },
+        function() {
+          // error
+          console.log('tag ' + self.tagToSearch + ' - error');
+        }
+    );
+  };
+  self.returnToTagForm = function() {
+    self.displaySearchedTag = false;
+    self.tagToSearch = '';
+    self.searchedTag = '';
+    self.domains = [];
+  };
 }
 
 function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {

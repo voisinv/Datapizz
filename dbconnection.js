@@ -58,7 +58,8 @@ var getLinkWithoutWeightForCSV = function(article, allTags, links) {
       links.push({
         source: tags[fIt],
         target: tags[sIt],
-        url: article.url
+        url: article.url,
+        title: article.title
       });
     }
   }
@@ -99,6 +100,21 @@ var createLinks = function(result) {
   return obj
 };
 
+var getUlsFromTag = function(result, tag) {
+  var obj = {
+    domains: [],
+    tag : tag
+  };
+  var articles = _.values(result.articles);
+
+  articles.forEach(function(article) {
+    if(article.tags && article.tags.length && _.indexOf(article.tags, tag) !== -1) {
+      obj.domains.push({url: article.url, title: article.title});
+    }
+  });
+  return obj
+};
+
 //PUBLIC
 var dbconnection = {
   get : function(res) {
@@ -129,12 +145,12 @@ var dbconnection = {
   getTagsLinksCSV : function(res) {
     db.once('value', function(s) {
       var tagsLinks = getTagsLinks(s.val());
-      var fields = ['source', 'target', 'url'];
+      var fields = ['source', 'target', 'url', 'title'];
       var myData = [];
       var result;
 
       tagsLinks.links.forEach(function(link) {
-        myData.push({'source': link.source, 'target': link.target, 'url': link.url});
+        myData.push({'source': link.source, 'target': link.target, 'url': link.url, 'title': link.title});
       });
 
       json2csv({ data: myData, fields: fields }, function(err, csv) {
@@ -143,6 +159,12 @@ var dbconnection = {
       });
 
       res.status(200).send(result);
+    });
+  },
+  getUlsFromTag : function(res, tag) {
+    db.once('value', function(s) {
+      var obj = getUlsFromTag(s.val(), tag);
+      res.status(200).send(obj);
     });
   }
 };
