@@ -1,8 +1,7 @@
-function MainController($scope, Server, $http) {
+function MainController(Server, $http, $location) {
   var self = this;
   self.connected = false;
-
-  self.displaySearchedTag = false;
+  self.title = 'Main';
   self.tagToSearch = '';
   self.searchedTag = '';
   self.domains = [];
@@ -41,28 +40,36 @@ function MainController($scope, Server, $http) {
         console.log(err);
       });
   };
-  self.tagDetails = function() {
-    self.displaySearchedTag = false;
-    var url = '/tagUrls/' + self.tagToSearch;
+  self.getDetails = function() {
+    var url = 'detail/' + self.tagToSearch;
+    $location.path(url);
+  };
+}
+
+function DetailController($routeParams, $location, $http) {
+  var self = this;
+
+  self.title = 'Detail';
+  self.tag = $routeParams.tag;
+  self.domains = [];
+
+  self.init = function() {
+    var url = 'tagUrls/' + self.tag;
     $http.get(url).then(
-        function(data) {
-          // success
-          console.log('tag ' + self.tagToSearch + ' - success');
-          self.displaySearchedTag = true;
-          self.searchedTag = data.data.tag;
-          self.domains = data.data.domains;
-        },
-        function() {
-          // error
-          console.log('tag ' + self.tagToSearch + ' - error');
-        }
+      function(data) {
+        // success
+        console.log('tag ' + self.tag + ' - success');
+        self.domains = data.data.domains;
+      },
+      function() {
+        // error
+        console.log('tag ' + self.tag + ' - error');
+      }
     );
   };
+
   self.returnToTagForm = function() {
-    self.displaySearchedTag = false;
-    self.tagToSearch = '';
-    self.searchedTag = '';
-    self.domains = [];
+    $location.path('/');
   };
 }
 
@@ -101,4 +108,5 @@ function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
 
 angular.module('datapizz.controllers')
     .controller('MainController', MainController)
-    .controller('MainGraphController', MainGraphController)
+    .controller('DetailController', DetailController)
+    .controller('MainGraphController', MainGraphController);
