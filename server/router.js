@@ -17,11 +17,12 @@ router.get('/partials/:name', function (req, res) {
 router.get('/api', function(req, res) {
   entities.get(res);
 });
-router.get('/tagsListCSV', function(req, res) {
-  entities.getTagsListCSV(res);
+
+router.get('/tagsListCSV/:company/:project', function(req, res) {
+  entities.getTagsListCSV(res, req.params.company, req.params.project);
 });
-router.get('/tagsLinksCSV', function(req, res) {
-  entities.getTagsLinksCSV(res);
+router.get('/tagsLinksCSV/:company/:project', function(req, res) {
+  entities.getTagsLinksCSV(res, req.params.company, req.params.project);
 });
 router.get('/tagUrls/:tag', function(req, res) {
   entities.getUlsFromTag(res, req.params.tag);
