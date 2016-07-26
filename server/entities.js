@@ -135,7 +135,6 @@ var entities = {
       var tagsList = getTagsList(s.val());
       var fields = ['id', 'label', 'weight'];
       var myData = [];
-      var result;
 
       tagsList.forEach(function(tag) {
         myData.push({'id': tag.value, 'label': tag.value, 'weight': tag.weight});
@@ -143,10 +142,8 @@ var entities = {
 
       json2csv({ data: myData, fields: fields }, function(err, csv) {
         if (err) console.log(err);
-        result = csv;
+        res.status(200).send(csv);
       });
-
-      res.status(200).send(result);
     });
   },
   getTagsLinksCSV : function(res, company, project) {
@@ -163,10 +160,8 @@ var entities = {
 
       json2csv({ data: myData, fields: fields }, function(err, csv) {
         if (err) console.log(err);
-        result = csv;
+        res.status(200).send(csv);
       });
-
-      res.status(200).send(result);
     });
   },
   getUlsFromTag : function(res, tag) {
