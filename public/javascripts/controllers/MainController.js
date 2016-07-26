@@ -6,11 +6,14 @@ function MainController(Server, $http, $location) {
   self.searchedTag = '';
   self.domains = [];
 
+  self.company = '';
+  self.project = '';
+
   self.connect = function() {
     Server.connect().then(function(){self.connected = true;})
   };
   self.getTagsListCSV = function() {
-    $http.get('/tagsListCSV').then(
+    $http.get('/tagsListCSV/' + self.company + '/' + self.project).then(
       function(data) {
         console.log('success');
 
@@ -26,7 +29,7 @@ function MainController(Server, $http, $location) {
       });
   };
   self.getTagsLinksCSV = function() {
-    $http.get('/tagsLinksCSV').then(
+    $http.get('/tagsLinksCSV/' + self.company + '/' + self.project).then(
       function(data) {
         console.log('success');
 

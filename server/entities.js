@@ -2,8 +2,6 @@ var _ = require('lodash');
 var Firebase = require('firebase');
 var json2csv = require('json2csv');
 
-var db = new Firebase('https://pizzaaa.firebaseio.com/');
-
 // PRIVATE
 function getIndex (value) {
   var length = this.length;
@@ -39,15 +37,21 @@ var getLinkWithWeight = function(tags, allTags, links) {
 var getTagsLinks = function(result) {
     var obj = {
         links: [],
-        articles : _.values(result.articles),
-        tags : _.values(result.tags)
+        articles: [],
+        tags: []
     };
 
-    obj.articles.forEach(function(article) {
-        if(article.tags && article.tags.length) {
-            getLinkWithoutWeightForCSV(article, obj.tags, obj.links);
-        }
+  if(result.articles && result.tags) {
+    obj.articles = _.values(result.articles);
+    obj.tags = _.values(result.tags);
+
+    obj.articles.forEach(function (article) {
+      if (article.tags && article.tags.length) {
+        getLinkWithoutWeightForCSV(article, obj.tags, obj.links);
+      }
     });
+  }
+
     return obj
 };
 var getLinkWithoutWeightForCSV = function(article, allTags, links) {
@@ -67,20 +71,22 @@ var getLinkWithoutWeightForCSV = function(article, allTags, links) {
 
 var getTagsList = function(result) {
   var tagsList = [];
-  var articles = _.values(result.articles);
+  if(result.articles) {
+    var articles = _.values(result.articles);
 
-  articles.forEach(function(article) {
-    if(article.tags && article.tags.length > 0) {
-      article.tags.forEach(function (tag) {
-        var tempTag = _.findWhere(tagsList, {value: tag});
-        if (tempTag) {
-          tempTag.weight++;
-        } else {
-          tagsList.push({value: tag, weight: 1});
-        }
-      });
-    }
-  });
+    articles.forEach(function (article) {
+      if (article.tags && article.tags.length > 0) {
+        article.tags.forEach(function (tag) {
+          var tempTag = _.findWhere(tagsList, {value: tag});
+          if (tempTag) {
+            tempTag.weight++;
+          } else {
+            tagsList.push({value: tag, weight: 1});
+          }
+        });
+      }
+    });
+  }
 
   return tagsList;
 };
@@ -116,14 +122,15 @@ var getUlsFromTag = function(result, tag) {
 };
 
 //PUBLIC
-var dbconnection = {
+var entities = {
   get : function(res) {
     db.once('value', function(s) {
       var obj = createLinks(s.val());
       res.status(200).send(obj);
     });
   },
-  getTagsListCSV : function(res) {
+  getTagsListCSV : function(res, company, project) {
+    var db = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project);
     db.once('value', function(s) {
       var tagsList = getTagsList(s.val());
       var fields = ['id', 'label', 'weight'];
@@ -142,7 +149,8 @@ var dbconnection = {
       res.status(200).send(result);
     });
   },
-  getTagsLinksCSV : function(res) {
+  getTagsLinksCSV : function(res, company, project) {
+    var db = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project);
     db.once('value', function(s) {
       var tagsLinks = getTagsLinks(s.val());
       var fields = ['source', 'target', 'url', 'title'];
@@ -169,4 +177,4 @@ var dbconnection = {
   }
 };
 
-module.exports = dbconnection;
+module.exports = entities;
