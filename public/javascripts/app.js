@@ -7,12 +7,12 @@ angular.module('datapizz.filters', []);
 
 var modules = [
     'ngMaterial',
-    'ui.router',
+    'ngRoute',
     'datapizz.controllers',
     'datapizz.services',
     'datapizz.directives',
-    'datapizz.filters',
-]
+    'datapizz.filters'
+];
 
 angular.module('datapizz', modules)
     .config(function($mdThemingProvider) {
@@ -21,4 +21,17 @@ angular.module('datapizz', modules)
             .backgroundPalette('grey')
             .warnPalette('red')
             .accentPalette('pink');
+    })
+    .config(function($routeProvider) {
+        $routeProvider
+            // TODO : Ne trouve pas les templates ??
+            .when('/', {
+                templateUrl: '../template/main.html',
+                controller: 'MainController as main'
+            })
+            .when('/detail/:tag', {
+                templateUrl: '../template/detail.html',
+                controller: 'DetailController as detail'
+            })
+            .otherwise('/main');
     });

@@ -5,9 +5,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var _ = require('lodash');
 
-var entities = require('./dbconnection');
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var routes = require('./server/router');
+var users = require('./server/users');
 
 var app = express();
 
@@ -29,20 +28,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
-app.get('/partials/:name', function (req, res) {
-  var name = req.params.name;
-  res.render('partials/' + name);
-});
-app.use('/api', function(req, res) {
-  entities.get(res);
-});
-app.get('/tagsListCSV', function(req, res) {
-  entities.getTagsListCSV(res);
-});
-app.get('/tagsLinksCSV', function(req, res) {
-  entities.getTagsLinksCSV(res);
-});
 
+
+/*
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -67,6 +55,6 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
-});
+});*/
 
 module.exports = app;

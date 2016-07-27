@@ -1,12 +1,19 @@
-function MainController($scope, Server, $http) {
+function MainController(Server, $http, $location) {
   var self = this;
   self.connected = false;
+  self.title = 'Main';
+  self.tagToSearch = '';
+  self.searchedTag = '';
+  self.domains = [];
+
+  self.company = '';
+  self.project = '';
 
   self.connect = function() {
     Server.connect().then(function(){self.connected = true;})
   };
   self.getTagsListCSV = function() {
-    $http.get('/tagsListCSV').then(
+    $http.get('/tagsListCSV/' + self.company + '/' + self.project).then(
       function(data) {
         console.log('success');
 
@@ -21,22 +28,52 @@ function MainController($scope, Server, $http) {
         console.log(err);
       });
   };
-  self.getTagsLinksCSV = function() {
-    $http.get('/tagsLinksCSV').then(
+  self.getLinksListCSV = function() {
+    $http.get('/linksListCSV/' + self.company + '/' + self.project).then(
       function(data) {
         console.log('success');
 
         var hiddenElement = document.createElement('a');
         hiddenElement.href = 'data:attachment/csv,' + encodeURI(data.data);
         hiddenElement.target = '_blank';
-        hiddenElement.download = 'tagsLinks.csv';
+        hiddenElement.download = 'linksList.csv';
         hiddenElement.click();
       },
       function(err) {
         console.log(err);
       });
   };
+  self.getDetails = function() {
+    var url = 'detail/' + self.tagToSearch;
+    $location.path(url);
+  };
+}
 
+function DetailController($routeParams, $location, $http) {
+  var self = this;
+
+  self.title = 'Detail';
+  self.tag = $routeParams.tag;
+  self.domains = [];
+
+  self.init = function() {
+    var url = 'tagUrls/' + self.tag;
+    $http.get(url).then(
+      function(data) {
+        // success
+        console.log('tag ' + self.tag + ' - success');
+        self.domains = data.data.domains;
+      },
+      function() {
+        // error
+        console.log('tag ' + self.tag + ' - error');
+      }
+    );
+  };
+
+  self.returnToTagForm = function() {
+    $location.path('/');
+  };
 }
 
 function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
@@ -74,4 +111,5 @@ function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
 
 angular.module('datapizz.controllers')
     .controller('MainController', MainController)
-    .controller('MainGraphController', MainGraphController)
+    .controller('DetailController', DetailController)
+    .controller('MainGraphController', MainGraphController);

@@ -1,0 +1,26 @@
+<div layout="column" flex="40" style="padding-bottom: 10px;">
+    <md-input-container>
+        <label>tag</label>
+        <input type="text" ng-model="main.tagToSearch"/>
+    </md-input-container>
+
+    <md-button md-no-ink="md-no-ink" ng-click="main.getDetails()" class="md-raised" flex>Get tag detail</md-button>
+</div>
+
+<md-divider></md-divider>
+
+<!-- csv part -->
+<div layout="column" flex="40">
+    <md-input-container>
+        <label>Company</label>
+        <input type="text" ng-model="main.company">
+    </md-input-container>
+
+    <md-input-container>
+        <label>Projet</label>
+        <input type="text" ng-model="main.project">
+    </md-input-container>
+
+    <md-button md-no-ink="md-no-ink" ng-click="main.getTagsListCSV()" class="md-raised" flex>Tag list CSV</md-button>
+    <md-button md-no-ink="md-no-ink" ng-click="main.getLinksListCSV()" class="md-raised" flex>Link list CSV</md-button>
+</div>

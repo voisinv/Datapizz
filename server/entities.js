@@ -2,8 +2,6 @@ var _ = require('lodash');
 var Firebase = require('firebase');
 var json2csv = require('json2csv');
 
-var db = new Firebase('https://pizzaaa.firebaseio.com/');
-
 // PRIVATE
 function getIndex (value) {
   var length = this.length;
@@ -36,27 +34,36 @@ var getLinkWithWeight = function(tags, allTags, links) {
   }
 };
 
-var getTagsLinks = function(result) {
+var getLinksList = function(result) {
     var obj = {
         links: [],
-        articles : _.values(result.articles),
-        tags : _.values(result.tags)
+        articles: [],
+        tags: []
     };
 
-    obj.articles.forEach(function(article) {
-        if(article.tags && article.tags.length) {
-            getLinkWithoutWeightForCSV(article.tags, obj.tags, obj.links);
-        }
+  if(result.articles && result.tags) {
+    obj.articles = _.values(result.articles);
+    obj.tags = _.values(result.tags);
+
+    obj.articles.forEach(function (article) {
+      if (article.tags && article.tags.length) {
+        getLinkWithoutWeightForCSV(article, obj.tags, obj.links);
+      }
     });
+  }
+
     return obj
 };
-var getLinkWithoutWeightForCSV = function(tags, allTags, links) {
+var getLinkWithoutWeightForCSV = function(article, allTags, links) {
+  const tags = article.tags;
   var numberOfTags = tags.length;
   for(var fIt = 0; fIt < numberOfTags; fIt++) {
     for(var sIt = fIt + 1; sIt < numberOfTags; sIt++) {
       links.push({
         source: tags[fIt],
-        target: tags[sIt]
+        target: tags[sIt],
+        url: article.url,
+        title: article.title
       });
     }
   }
@@ -64,20 +71,22 @@ var getLinkWithoutWeightForCSV = function(tags, allTags, links) {
 
 var getTagsList = function(result) {
   var tagsList = [];
-  var articles = _.values(result.articles);
+  if(result.articles) {
+    var articles = _.values(result.articles);
 
-  articles.forEach(function(article) {
-    if(article.tags && article.tags.length > 0) {
-      article.tags.forEach(function (tag) {
-        var tempTag = _.findWhere(tagsList, {value: tag});
-        if (tempTag) {
-          tempTag.weight++;
-        } else {
-          tagsList.push({value: tag, weight: 1});
-        }
-      });
-    }
-  });
+    articles.forEach(function (article) {
+      if (article.tags && article.tags.length > 0) {
+        article.tags.forEach(function (tag) {
+          var tempTag = _.findWhere(tagsList, {value: tag});
+          if (tempTag) {
+            tempTag.weight++;
+          } else {
+            tagsList.push({value: tag, weight: 1});
+          }
+        });
+      }
+    });
+  }
 
   return tagsList;
 };
@@ -97,20 +106,35 @@ var createLinks = function(result) {
   return obj
 };
 
+var getUlsFromTag = function(result, tag) {
+  var obj = {
+    domains: [],
+    tag : tag
+  };
+  var articles = _.values(result.articles);
+
+  articles.forEach(function(article) {
+    if(article.tags && article.tags.length && _.indexOf(article.tags, tag) !== -1) {
+      obj.domains.push({url: article.url, title: article.title});
+    }
+  });
+  return obj
+};
+
 //PUBLIC
-var dbconnection = {
+var entities = {
   get : function(res) {
     db.once('value', function(s) {
       var obj = createLinks(s.val());
       res.status(200).send(obj);
     });
   },
-  getTagsListCSV : function(res) {
+  getTagsListCSV : function(res, company, project) {
+    var db = new Firebase('https://bdd-' + company.toLowerCase() + '.firebaseio.com/' + project.toLowerCase());
     db.once('value', function(s) {
       var tagsList = getTagsList(s.val());
       var fields = ['id', 'label', 'weight'];
       var myData = [];
-      var result;
 
       tagsList.forEach(function(tag) {
         myData.push({'id': tag.value, 'label': tag.value, 'weight': tag.weight});
@@ -118,31 +142,34 @@ var dbconnection = {
 
       json2csv({ data: myData, fields: fields }, function(err, csv) {
         if (err) console.log(err);
-        result = csv;
+        res.status(200).send(csv);
       });
-
-      res.status(200).send(result);
     });
   },
-  getTagsLinksCSV : function(res) {
+  getLinksListCSV : function(res, company, project) {
+    var db = new Firebase('https://bdd-' + company.toLowerCase() + '.firebaseio.com/' + project.toLowerCase());
     db.once('value', function(s) {
-      var tagsLinks = getTagsLinks(s.val());
-      var fields = ['source', 'target'];
+      var tagsLinks = getLinksList(s.val());
+      var fields = ['source', 'target', 'url', 'title'];
       var myData = [];
       var result;
 
       tagsLinks.links.forEach(function(link) {
-        myData.push({'source': link.source, 'target': link.target});
+        myData.push({'source': link.source, 'target': link.target, 'url': link.url, 'title': link.title});
       });
 
       json2csv({ data: myData, fields: fields }, function(err, csv) {
         if (err) console.log(err);
-        result = csv;
+        res.status(200).send(csv);
       });
-
-      res.status(200).send(result);
+    });
+  },
+  getUlsFromTag : function(res, tag) {
+    db.once('value', function(s) {
+      var obj = getUlsFromTag(s.val(), tag);
+      res.status(200).send(obj);
     });
   }
 };
 
-module.exports = dbconnection;
+module.exports = entities;
