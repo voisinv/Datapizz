@@ -2,9 +2,12 @@ var express = require('express');
 var router = express.Router();
 var entities = require('./entities');
 
+var env = process.env.NODE_ENV || 'dev';
+console.log('env: ' + env);
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('here');
+  console.log('env: ' + env);
   res.render('index', { title: 'Express' });
 });
 

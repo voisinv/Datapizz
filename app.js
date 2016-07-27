@@ -10,9 +10,6 @@ var users = require('./server/users');
 
 var app = express();
 
-var env = process.env.NODE_ENV || 'dev';
-console.log('env: ' + env);
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
