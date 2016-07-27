@@ -28,15 +28,15 @@ function MainController(Server, $http, $location) {
         console.log(err);
       });
   };
-  self.getTagsLinksCSV = function() {
-    $http.get('/tagsLinksCSV/' + self.company + '/' + self.project).then(
+  self.getLinksListCSV = function() {
+    $http.get('/linksListCSV/' + self.company + '/' + self.project).then(
       function(data) {
         console.log('success');
 
         var hiddenElement = document.createElement('a');
         hiddenElement.href = 'data:attachment/csv,' + encodeURI(data.data);
         hiddenElement.target = '_blank';
-        hiddenElement.download = 'tagsLinks.csv';
+        hiddenElement.download = 'linksList.csv';
         hiddenElement.click();
       },
       function(err) {

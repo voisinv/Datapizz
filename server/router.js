@@ -21,8 +21,8 @@ router.get('/api', function(req, res) {
 router.get('/tagsListCSV/:company/:project', function(req, res) {
   entities.getTagsListCSV(res, req.params.company, req.params.project);
 });
-router.get('/tagsLinksCSV/:company/:project', function(req, res) {
-  entities.getTagsLinksCSV(res, req.params.company, req.params.project);
+router.get('/linksListCSV/:company/:project', function(req, res) {
+  entities.getLinksListCSV(res, req.params.company, req.params.project);
 });
 router.get('/tagUrls/:tag', function(req, res) {
   entities.getUlsFromTag(res, req.params.tag);

@@ -34,7 +34,7 @@ var getLinkWithWeight = function(tags, allTags, links) {
   }
 };
 
-var getTagsLinks = function(result) {
+var getLinksList = function(result) {
     var obj = {
         links: [],
         articles: [],
@@ -130,7 +130,7 @@ var entities = {
     });
   },
   getTagsListCSV : function(res, company, project) {
-    var db = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project);
+    var db = new Firebase('https://bdd-' + company.toLowerCase() + '.firebaseio.com/' + project.toLowerCase());
     db.once('value', function(s) {
       var tagsList = getTagsList(s.val());
       var fields = ['id', 'label', 'weight'];
@@ -146,10 +146,10 @@ var entities = {
       });
     });
   },
-  getTagsLinksCSV : function(res, company, project) {
-    var db = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project);
+  getLinksListCSV : function(res, company, project) {
+    var db = new Firebase('https://bdd-' + company.toLowerCase() + '.firebaseio.com/' + project.toLowerCase());
     db.once('value', function(s) {
-      var tagsLinks = getTagsLinks(s.val());
+      var tagsLinks = getLinksList(s.val());
       var fields = ['source', 'target', 'url', 'title'];
       var myData = [];
       var result;
