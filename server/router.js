@@ -19,10 +19,14 @@ router.get('/api', function(req, res) {
 });
 
 router.get('/tagsListCSV/:company/:project', function(req, res) {
-  entities.getTagsListCSV(res, req.params.company, req.params.project);
+  var company = 'dev'; // prod : req.params.company
+  var project = 'projet1'; // prod : req.params.project
+  entities.getTagsListCSV(res, company, project);
 });
 router.get('/linksListCSV/:company/:project', function(req, res) {
-  entities.getLinksListCSV(res, req.params.company, req.params.project);
+  var company = 'dev'; // prod : req.params.company
+  var project = 'projet1'; // prod : req.params.project
+  entities.getLinksListCSV(res, company, project);
 });
 router.get('/tagUrls/:tag', function(req, res) {
   entities.getUlsFromTag(res, req.params.tag);
