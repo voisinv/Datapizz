@@ -29,7 +29,7 @@ angular.module('datapizz', modules)
                 templateUrl: '../template/main.html',
                 controller: 'MainController as main'
             })
-            .when('/detail/:tag', {
+            .when('/detail/:company/:project/:tag', {
                 templateUrl: '../template/detail.html',
                 controller: 'DetailController as detail'
             })
