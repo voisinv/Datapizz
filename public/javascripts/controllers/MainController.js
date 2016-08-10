@@ -49,6 +49,20 @@ function MainController(Server, $http, $location) {
         var url = 'detail/' + self.company + '/' + self.project + '/' + self.tagToSearch;
         $location.path(url);
     };
+    self.addTag = function() {
+        var url = 'addTag/:' + self.company + '/' + self.project + '/' + self.tagValueToAdd + '/' + self.tagCategoryToAdd;
+        $http.get(url).then(
+            function(res) { console.log(res); },
+            function(err) { console.log(err); }
+        );
+    }
+    self.toLowerCaseAll = function() {
+        var url = '/toLowerCase/' + self.company + '/' + self.project;
+        $http.get(url).then(
+            function(res) { console.log(res); },
+            function(err) { console.log(err); }
+        );
+    }
 }
 
 function DetailController($routeParams, $location, $http) {
