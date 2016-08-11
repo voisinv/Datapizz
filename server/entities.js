@@ -126,7 +126,8 @@ function getUlsFromTag(result, tag) {
 }
 
 function toLowerCase(result) {
-    console.log(result.tags[0]);
+    _.values(result.tags).forEach(function(tag) {
+    });
 }
 
 //PUBLIC
@@ -181,8 +182,6 @@ var entities = {
         });
     },
     toLowerCase : function(res, company, project) {
-        console.log(company);
-        console.log(project);
         var db = getDataBase(company, project);
         db.once('value', function(s) {
             var obj = toLowerCase(s.val());
