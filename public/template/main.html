@@ -1,41 +1,37 @@
 <div layout="row">
-
-
     <!-- detail tag part -->
-    <md-card flex="40">
+    <md-card>
         <md-card-title>
-            <md-card-title-text>
+            <md-card-title-text style="padding: 5px;">
                 <span class="md-headline">Tag detail</span>
             </md-card-title-text>
         </md-card-title>
         <md-card-content layout="column">
-                <md-input-container>
-                    <label>Company</label>
-                    <input type="text" ng-model="main.company">
-                </md-input-container>
+            <md-input-container>
+                <label>Company</label>
+                <input type="text" ng-model="main.company">
+            </md-input-container>
 
-                <md-input-container>
-                    <label>Project</label>
-                    <input type="text" ng-model="main.project">
-                </md-input-container>
+            <md-input-container>
+                <label>Project</label>
+                <input type="text" ng-model="main.project">
+            </md-input-container>
 
-                <md-input-container>
-                    <label>tag</label>
-                    <input type="text" ng-model="main.tagToSearch"/>
-                </md-input-container>
+            <md-input-container>
+                <label>tag</label>
+                <input type="text" ng-model="main.tagToSearch"/>
+            </md-input-container>
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center">
             <md-button md-no-ink="md-no-ink" ng-click="main.getDetails()" class="md-raised" flex>Get tag detail</md-button>
         </md-card-actions>
     </md-card>
 
-    <div flex="15"></div>
-
     <!-- csv part -->
-    <md-card flex="40">
+    <md-card>
         <md-card-title>
-            <md-card-title-text>
-                <span class="md-headline">Get CSVs</span>
+            <md-card-title-text style="padding: 5px;">
+                <span class="md-headline">Extract data (CSV)</span>
             </md-card-title-text>
         </md-card-title>
         <md-card-content layout="column">
@@ -49,60 +45,49 @@
                     <input type="text" ng-model="main.project">
                 </md-input-container>
         </md-card-content>
-        <md-card-actions layout="row" layout-align="end center">
-            <md-button md-no-ink="md-no-ink" ng-click="main.getTagsListCSV()" class="md-raised" flex>Tag list CSV</md-button>
-            <md-button md-no-ink="md-no-ink" ng-click="main.getLinksListCSV()" class="md-raised" flex>Link list CSV</md-button>
+        <md-card-actions layout="column" layout-align="end center">
+            <md-button md-no-ink="md-no-ink" ng-click="main.getTagsListCSV()" class="md-raised" flex>get tag list</md-button>
+            <md-button md-no-ink="md-no-ink" ng-click="main.getLinksListCSV()" class="md-raised" flex>get link list</md-button>
         </md-card-actions>
     </md-card>
 
+    <!-- add tag -->
+    <md-card>
+        <md-card-title>
+            <md-card-title-text style="padding: 5px;">
+                <span class="md-headline">Add tag</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content layout="column">
+            <md-input-container>
+                <label>Company</label>
+                <input type="text" ng-model="main.company">
+            </md-input-container>
+
+            <md-input-container>
+                <label>Project</label>
+                <input type="text" ng-model="main.project">
+            </md-input-container>
+            <div layout="row">
+                <md-input-container>
+                    <label>Tag</label>
+                    <input type="text" ng-model="main.tagValueToAdd">
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Category</label>
+                    <input type="text" ng-model="main.tagCategoryToAdd">
+                </md-input-container>
+            </div>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button md-no-ink="md-no-ink" ng-click="main.addTag()" class="md-raised" flex>Add tag</md-button>
+        </md-card-actions>
+    </md-card>
+
+    <!-- add article -->
 </div>
 
 <md-divider></md-divider>
 
 <md-button md-no-ink="md-no-ink" ng-click="main.toLowerCaseAll()" class="md-raised" flex>to LowerCase tags</md-button>
-
-<md-divider></md-divider>
-
-<!-- add tag part -->
-<div layout="column" flex="40">
-    Add tag
-    <md-input-container>
-        <label>Company</label>
-        <input type="text" ng-model="main.company">
-    </md-input-container>
-
-    <md-input-container>
-        <label>Project</label>
-        <input type="text" ng-model="main.project">
-    </md-input-container>
-    <div layout="row">
-        <md-input-container>
-            <label>Tag</label>
-            <input type="text" ng-model="main.tagValueToAdd">
-        </md-input-container>
-
-        <md-input-container>
-            <label>Category</label>
-            <input type="text" ng-model="main.tagCategoryToAdd">
-        </md-input-container>
-    </div>
-    <md-button md-no-ink="md-no-ink" ng-click="main.addTag()" class="md-raised" flex>Add tag</md-button>
-</div>
-
-<md-divider></md-divider>
-
-<!-- add article part -->
-<!--<div layout="column" flex="40">-->
-    <!--<md-input-container>-->
-        <!--<label>Company</label>-->
-        <!--<input type="text" ng-model="main.company">-->
-    <!--</md-input-container>-->
-
-    <!--<md-input-container>-->
-        <!--<label>Project</label>-->
-        <!--<input type="text" ng-model="main.project">-->
-    <!--</md-input-container>-->
-
-    <!--<md-button md-no-ink="md-no-ink" ng-click="main.getTagsListCSV()" class="md-raised" flex>Tag list CSV</md-button>-->
-    <!--<md-button md-no-ink="md-no-ink" ng-click="main.getLinksListCSV()" class="md-raised" flex>Link list CSV</md-button>-->
-<!--</div>-->
