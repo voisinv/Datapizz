@@ -125,8 +125,33 @@ function getUlsFromTag(result, tag) {
     return obj
 }
 
-function toLowerCase(result) {
-    _.values(result.tags).forEach(function(tag) {
+function toLowerCaseInTags(result, company, project) {
+    var keyList = [];
+    _.mapKeys(result.tags, function (value, key) {
+        keyList.push({'key': key, 'tag': value});
+    });
+    keyList.forEach(function(key) {
+        var dbByTag = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project + '/tags');
+        dbByTag.child(key.key).set({'category': key.tag.category.toLowerCase(), 'value': key.tag.value.toLowerCase()});
+    });
+}
+function toLowerCaseInArticles(result, company, project) {
+    var keyList = [];
+    _.mapKeys(result.articles, function (value, key) {
+        keyList.push({'key': key, 'value': value});
+    });
+    keyList.forEach(function(key) {
+        var dbByTag = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project + '/articles');
+        var lowerCaseTags = _.flatMap(key.value.tags, function(tag) {
+            return tag.toLowerCase();
+        });
+        dbByTag.child(key.key).set({
+            'date': key.value.date ? key.value.date : '',
+            'mediaTypes': key.value.mediaTypes ? key.value.mediaTypes : null,
+            'tags': lowerCaseTags,
+            'title': key.value.title ? key.value.title : '',
+            'url': key.value.url ? key.value.url : ''
+        });
     });
 }
 
@@ -184,8 +209,9 @@ var entities = {
     toLowerCase : function(res, company, project) {
         var db = getDataBase(company, project);
         db.once('value', function(s) {
-            var obj = toLowerCase(s.val());
-            res.status(200).send(obj);
+            //toLowerCaseInTags(s.val(), company, project);
+            toLowerCaseInArticles(s.val(), company, project);
+            res.status(200);
         });
     },
     addTag : function(res, company, project, tagValue, tagCategory) {
