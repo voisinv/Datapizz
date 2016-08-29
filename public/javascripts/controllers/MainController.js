@@ -55,7 +55,7 @@ function MainController(Server, $http, $location) {
             function(res) { console.log(res); },
             function(err) { console.log(err); }
         );
-    }
+    };
     self.toLowerCaseAll = function() {
         var url = '/toLowerCase/' + self.company + '/' + self.project;
         $http.get(url).then(

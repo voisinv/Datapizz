@@ -1,12 +1,12 @@
 <section layout="column" ng-init="detail.init()" style="padding: 10px;">
-    <h1>Tag : {{detail.tag}}</h1>
+    <h1 style="color: #00826C;">Tag : {{detail.tag}}</h1>
     <md-divider></md-divider>
-    <div ng-repeat="domain in detail.domains" layout="row" layout-align="center center" style="height: 38px;margin-bottom: 10px;">
+    <div ng-repeat="domain in detail.domains" layout="row" layout-align="center center" style="color: #A26700; height: 38px;margin-bottom: 10px;">
         <div flex="50">{{domain.title}}</div>
         <div flex="50">{{domain.url}}</div>
     </div>
     <md-divider></md-divider>
     <div layout="row" layout-align="center">
-        <md-button md-no-ink="md-no-ink" ng-click="detail.returnToTagForm()" flex="20" class="md-raised">Retour</md-button>
+        <md-button style="background-color: #4A8077; color: white;" md-no-ink="md-no-ink" ng-click="detail.returnToTagForm()" flex="20" class="md-raised">Retour</md-button>
     </div>
 </section>

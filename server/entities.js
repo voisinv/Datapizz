@@ -127,6 +127,7 @@ function getUlsFromTag(result, tag) {
 
 function toLowerCase(result) {
     _.values(result.tags).forEach(function(tag) {
+        console.log(tag);
     });
 }
 
