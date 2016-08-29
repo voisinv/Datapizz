@@ -112,5 +112,28 @@
         </md-card-actions>
     </md-card>
 
+    <!-- Lowercase tags -->
+    <md-card>
+        <md-card-title>
+            <md-card-title-text style="padding: 5px;">
+                <span class="md-headline">Lowercase tags</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content layout="column">
+            <md-input-container>
+                <label>Company</label>
+                <input type="text" ng-model="main.company">
+            </md-input-container>
+
+            <md-input-container>
+                <label>Project</label>
+                <input type="text" ng-model="main.project">
+            </md-input-container>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button md-no-ink="md-no-ink" ng-click="main.toLowerCaseAll()" class="md-raised" flex>lowercase tags</md-button>
+        </md-card-actions>
+    </md-card>
+
     <!-- add article -->
 </div>
