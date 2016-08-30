@@ -40,5 +40,22 @@ router.get('/tagDetails/:company/:project/:tag', function(req, res) {
         entities.getUlsFromTag(res, req.params.company.toLowerCase(), req.params.project.toLowerCase(), req.params.tag.toLowerCase());
     }
 });
+router.get('/toLowerCase/:company/:project', function(req, res) {
+    if (env === 'dev') {
+        entities.toLowerCase(res, 'dev', 'projet1');
+    } else {
+        entities.toLowerCase(res, req.params.company.toLowerCase(), req.params.project.toLowerCase());
+    }
+});
+router.get('/addTag/:company/:project/:tagValue/:tagCategory', function(req, res) {
+    if (env === 'dev') {
+        entities.addTag(res, 'dev', 'projet1', req.params.tagValue, req.params.tagCategory);
+    } else {
+        entities.addTag(res, req.params.company.toLowerCase(), req.params.project.toLowerCase(), req.params.tagValue, req.params.tagCategory);
+    }
+});
+router.post('/login', function(req, res) {
+    entities.login(res, req.body);
+});
 
 module.exports = router;

@@ -3,6 +3,10 @@ var Firebase = require('firebase');
 var json2csv = require('json2csv');
 
 // PRIVATE
+function getDataBase(company, project) {
+    return new Firebase('https://bdd-' + company + '.firebaseio.com/' + project);
+}
+
 function getIndex (value) {
     var length = this.length;
     for(var index = 0; index < length; index++) {
@@ -10,11 +14,11 @@ function getIndex (value) {
     }
 }
 
-var getId = function(value) {
+function getId(value) {
     return getIndex.call(this, value);
-};
+}
 
-var getLinkWithWeight = function(tags, allTags, links) {
+function getLinkWithWeight(tags, allTags, links) {
     var numberOfTags = tags.length;
     for(var fIt = 0; fIt < numberOfTags; fIt++) {
         for(var sIt = fIt + 1; sIt < numberOfTags; sIt++) {
@@ -32,9 +36,9 @@ var getLinkWithWeight = function(tags, allTags, links) {
             }
         }
     }
-};
+}
 
-var getLinksList = function(result) {
+function getLinksList(result) {
     var obj = {
         links: [],
         articles: [],
@@ -53,8 +57,8 @@ var getLinksList = function(result) {
     }
 
     return obj
-};
-var getLinkWithoutWeightForCSV = function(article, allTags, links) {
+}
+function getLinkWithoutWeightForCSV(article, allTags, links) {
     const tags = article.tags;
     var numberOfTags = tags.length;
     for(var fIt = 0; fIt < numberOfTags; fIt++) {
@@ -67,9 +71,9 @@ var getLinkWithoutWeightForCSV = function(article, allTags, links) {
             });
         }
     }
-};
+}
 
-var getTagsList = function(result) {
+function getTagsList(result) {
     var tagsList = [];
     if(result.articles) {
         var articles = _.values(result.articles);
@@ -89,9 +93,9 @@ var getTagsList = function(result) {
     }
 
     return tagsList;
-};
+}
 
-var createLinks = function(result) {
+function createLinks(result) {
     var obj = {
         links: [],
         articles : _.values(result.articles),
@@ -104,9 +108,9 @@ var createLinks = function(result) {
         }
     });
     return obj
-};
+}
 
-var getUlsFromTag = function(result, tag) {
+function getUlsFromTag(result, tag) {
     var obj = {
         domains: [],
         tag : tag
@@ -119,18 +123,49 @@ var getUlsFromTag = function(result, tag) {
         }
     });
     return obj
-};
+}
+
+function toLowerCaseInTags(result, company, project) {
+    var keyList = [];
+    _.mapKeys(result.tags, function (value, key) {
+        keyList.push({'key': key, 'tag': value});
+    });
+    keyList.forEach(function(key) {
+        var dbByTag = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project + '/tags');
+        dbByTag.child(key.key).set({'category': key.tag.category.toLowerCase(), 'value': key.tag.value.toLowerCase()});
+    });
+}
+function toLowerCaseInArticles(result, company, project) {
+    var keyList = [];
+    _.mapKeys(result.articles, function (value, key) {
+        keyList.push({'key': key, 'value': value});
+    });
+    keyList.forEach(function(key) {
+        var dbByTag = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project + '/articles');
+        var lowerCaseTags = _.flatMap(key.value.tags, function(tag) {
+            return tag.toLowerCase();
+        });
+        dbByTag.child(key.key).set({
+            'date': key.value.date ? key.value.date : '',
+            'mediaTypes': key.value.mediaTypes ? key.value.mediaTypes : null,
+            'tags': lowerCaseTags,
+            'title': key.value.title ? key.value.title : '',
+            'url': key.value.url ? key.value.url : ''
+        });
+    });
+}
 
 //PUBLIC
 var entities = {
     get : function(res) {
+        var db = getDataBase(company, project);
         db.once('value', function(s) {
             var obj = createLinks(s.val());
             res.status(200).send(obj);
         });
     },
     getTagsListCSV : function(res, company, project) {
-        var db = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project);
+        var db = getDataBase(company, project);
         db.once('value', function(s) {
             var tagsList = getTagsList(s.val());
             var fields = ['id', 'label', 'weight'];
@@ -147,7 +182,7 @@ var entities = {
         });
     },
     getLinksListCSV : function(res, company, project) {
-        var db = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project);
+        var db = getDataBase(company, project);
         db.once('value', function(s) {
             var tagsLinks = getLinksList(s.val());
             var fields = ['source', 'target', 'url', 'title'];
@@ -165,11 +200,34 @@ var entities = {
         });
     },
     getUlsFromTag : function(res, company, project, tag) {
-        var db = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project);
+        var db = getDataBase(company, project);
         db.once('value', function(s) {
             var obj = getUlsFromTag(s.val(), tag);
             res.status(200).send(obj);
         });
+    },
+    toLowerCase : function(res, company, project) {
+        var db = getDataBase(company, project);
+        db.once('value', function(s) {
+            //toLowerCaseInTags(s.val(), company, project);
+            toLowerCaseInArticles(s.val(), company, project);
+            res.status(200);
+        });
+    },
+    addTag : function(res, company, project, tagValue, tagCategory) {
+        var db = getDataBase(company, project);
+        db.child('tags').push({
+            value: tagValue,
+            category: tagCategory
+        });
+        res.status(200);
+    },
+    login : function(res, userParams) {
+        if(userParams.userName === 'aflex' && userParams.password === 'lapu') {
+            res.status(200).send(true);
+        } else {
+            res.status(200).send(false);
+        }
     }
 };
 

@@ -1,6 +1,23 @@
-function MainController(Server, $http, $location) {
+function IndexController($location, $scope, User) {
     var self = this;
+
     self.connected = false;
+    $scope.$on('userChanged', function() {
+        self.connected = User.isConnected();
+    });
+
+    self.logIn = function () {
+        $location.path('/login');
+    };
+    self.logOut = function () {
+        User.clear();
+        $location.path('/');
+    };
+}
+
+function MainController($http, $location, User) {
+    var self = this;
+    self.connected = User.isConnected();
     self.title = 'Main';
     self.tagToSearch = '';
     self.searchedTag = '';
@@ -9,11 +26,6 @@ function MainController(Server, $http, $location) {
     self.company = '';
     self.project = '';
 
-    self.connect = function () {
-        Server.connect().then(function () {
-            self.connected = true;
-        })
-    };
     self.getTagsListCSV = function () {
         $http.get('/tagsListCSV/' + self.company + '/' + self.project).then(
             function (data) {
@@ -49,6 +61,20 @@ function MainController(Server, $http, $location) {
         var url = 'detail/' + self.company + '/' + self.project + '/' + self.tagToSearch;
         $location.path(url);
     };
+    self.addTag = function() {
+        var url = 'addTag/:' + self.company + '/' + self.project + '/' + self.tagValueToAdd + '/' + self.tagCategoryToAdd;
+        $http.get(url).then(
+            function(res) { console.log(res); },
+            function(err) { console.log(err); }
+        );
+    };
+    self.toLowerCaseAll = function() {
+        var url = '/toLowerCase/' + self.company + '/' + self.project;
+        $http.get(url).then(
+            function(res) { console.log(res); },
+            function(err) { console.log(err); }
+        );
+    }
 }
 
 function DetailController($routeParams, $location, $http) {
@@ -80,7 +106,7 @@ function DetailController($routeParams, $location, $http) {
     };
 }
 
-function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
+function MainGraphController($mdSidenav, $mdUtil, $log) {
     var self = this;
     self.collectionReady = false;
     self.display = function () {
@@ -113,8 +139,27 @@ function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
 
 }
 
+function LoginController($location, Server, User) {
+    var self = this;
+    self.userName = '';
+    self.password = '';
+
+    self.login = function() {
+        Server.login(self.userName, self.password).then(
+            function(result) {
+                User.load('', self.userName, result.data);
+                $location.path('/main');
+            },
+            function(err) {
+                console.log(err);
+            }
+        );
+    };
+}
 
 angular.module('datapizz.controllers')
+    .controller('IndexController', IndexController)
     .controller('MainController', MainController)
+    .controller('LoginController', LoginController)
     .controller('DetailController', DetailController)
     .controller('MainGraphController', MainGraphController);
