@@ -62,17 +62,17 @@ function MainController($http, $location, User) {
         $location.path(url);
     };
     self.addTag = function() {
-        var url = 'addTag/:' + self.company + '/' + self.project + '/' + self.tagValueToAdd + '/' + self.tagCategoryToAdd;
+        var url = 'addTag/' + self.company + '/' + self.project + '/' + self.tagValueToAdd + '/' + self.tagCategoryToAdd;
         $http.get(url).then(
-            function(res) { console.log(res); },
-            function(err) { console.log(err); }
+            function(res) { alert(res.data); },
+            function(err) { alert('Erreur adding tag'); }
         );
     };
     self.toLowerCaseAll = function() {
         var url = '/toLowerCase/' + self.company + '/' + self.project;
         $http.get(url).then(
-            function(res) { console.log(res); },
-            function(err) { console.log(err); }
+            function(res) { alert(res.data); },
+            function(err) { alert('Erreur lowercasing all tags'); }
         );
     }
 }

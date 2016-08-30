@@ -130,9 +130,13 @@ function toLowerCaseInTags(result, company, project) {
     _.mapKeys(result.tags, function (value, key) {
         keyList.push({'key': key, 'tag': value});
     });
+
     keyList.forEach(function(key) {
-        var dbByTag = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project + '/tags');
-        dbByTag.child(key.key).set({'category': key.tag.category.toLowerCase(), 'value': key.tag.value.toLowerCase()});
+        var dbByTags = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project + '/tags');
+        dbByTags.child(key.key).set({
+            category: key.tag.category.toLowerCase(),
+            value: key.tag.value.toLowerCase()
+        });
     });
 }
 function toLowerCaseInArticles(result, company, project) {
@@ -140,12 +144,13 @@ function toLowerCaseInArticles(result, company, project) {
     _.mapKeys(result.articles, function (value, key) {
         keyList.push({'key': key, 'value': value});
     });
+
     keyList.forEach(function(key) {
-        var dbByTag = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project + '/articles');
+        var dbByArticles = new Firebase('https://bdd-' + company + '.firebaseio.com/' + project + '/articles');
         var lowerCaseTags = _.flatMap(key.value.tags, function(tag) {
             return tag.toLowerCase();
         });
-        dbByTag.child(key.key).set({
+        dbByArticles.child(key.key).set({
             'date': key.value.date ? key.value.date : '',
             'mediaTypes': key.value.mediaTypes ? key.value.mediaTypes : null,
             'tags': lowerCaseTags,
@@ -209,9 +214,9 @@ var entities = {
     toLowerCase : function(res, company, project) {
         var db = getDataBase(company, project);
         db.once('value', function(s) {
-            //toLowerCaseInTags(s.val(), company, project);
+            toLowerCaseInTags(s.val(), company, project);
             toLowerCaseInArticles(s.val(), company, project);
-            res.status(200);
+            res.status(200).send('Lowercase all tags ok.');
         });
     },
     addTag : function(res, company, project, tagValue, tagCategory) {
@@ -220,7 +225,7 @@ var entities = {
             value: tagValue,
             category: tagCategory
         });
-        res.status(200);
+        res.status(200).send('Tag ' + tagValue + ' added successfully.');
     },
     login : function(res, userParams) {
         if(userParams.userName === 'aflex' && userParams.password === 'lapu') {
