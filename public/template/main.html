@@ -54,32 +54,6 @@
 </div>
 
 <div layout="row" ng-if="main.connected">
-    <!-- tolowercase part -->
-    <md-card flex style="background-color: #FFF3DF;">
-        <md-card-title style="padding: 3px; color: #00826C;">
-            <md-card-title-text style="padding: 5px;">
-                <span class="md-headline">Lowercase all tags</span>
-            </md-card-title-text>
-        </md-card-title>
-        <md-card-content layout="column">
-            <md-input-container>
-                <label style="color: #A26700;">Company</label>
-                <input type="text" ng-model="main.company">
-            </md-input-container>
-
-            <md-input-container>
-                <label style="color: #A26700;">Project</label>
-                <input type="text" ng-model="main.project">
-            </md-input-container>
-        </md-card-content>
-        <md-card-actions layout="row" layout-align="end center">
-            <md-button style="background-color: #4A8077; color: white;"
-                       md-no-ink="md-no-ink" ng-click="main.toLowerCaseAll()" class="md-raised" flex>
-                to LowerCase tags
-            </md-button>
-        </md-card-actions>
-    </md-card>
-
     <!-- add tag -->
     <md-card flex style="background-color: #FFF3DF;">
         <md-card-title style="padding: 3px; color: #00826C;">

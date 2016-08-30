@@ -1,12 +1,20 @@
-<section layout="column" ng-init="detail.init()" style="padding: 10px;">
-    <h1 style="color: #00826C;">Tag : {{detail.tag}}</h1>
-    <md-divider></md-divider>
-    <div ng-repeat="domain in detail.domains" layout="row" layout-align="center center" style="color: #A26700; height: 38px;margin-bottom: 10px;">
-        <div flex="50">{{domain.title}}</div>
-        <div flex="50">{{domain.url}}</div>
-    </div>
-    <md-divider></md-divider>
-    <div layout="row" layout-align="center">
-        <md-button style="background-color: #4A8077; color: white;" md-no-ink="md-no-ink" ng-click="detail.returnToTagForm()" flex="20" class="md-raised">Retour</md-button>
-    </div>
-</section>
+<div layout="row" ng-init="detail.init()">
+    <md-card flex style="background-color: #FFF3DF;">
+        <md-card-title style="padding: 3px; color: #00826C;">
+            <md-card-title-text style="padding: 5px;">
+                <span class="md-headline">Detailed tag : {{detail.tag}}</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content layout="column">
+            <div style="margin-bottom: 15px;" ng-repeat="domain in detail.domains" layout="row" layout-align="center center">
+                <div flex="45">{{domain.title}}</div>
+                <div flex="5"></div>
+                <div flex="45">{{domain.url}}</div>
+            </div>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button style="background-color: #4A8077; color: white;" md-no-ink="md-no-ink"
+                       ng-click="detail.returnToTagForm()" flex="20" class="md-raised">Retour</md-button>
+        </md-card-actions>
+    </md-card>
+</div>
