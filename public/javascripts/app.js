@@ -25,13 +25,17 @@ angular.module('datapizz', modules)
     .config(function($routeProvider) {
         $routeProvider
             // TODO : Ne trouve pas les templates ??
-            .when('/', {
+            .when('/main', {
                 templateUrl: '../template/main.html',
                 controller: 'MainController as main'
             })
             .when('/detail/:company/:project/:tag', {
                 templateUrl: '../template/detail.html',
                 controller: 'DetailController as detail'
+            })
+            .when('/login', {
+                templateUrl: '../template/login.html',
+                controller: 'LoginController as login'
             })
             .otherwise('/main');
     });

@@ -1,6 +1,23 @@
-function MainController(Server, $http, $location) {
+function IndexController($location, $scope, User) {
     var self = this;
+
     self.connected = false;
+    $scope.$on('userChanged', function() {
+        self.connected = User.isConnected();
+    });
+
+    self.logIn = function () {
+        $location.path('/login');
+    };
+    self.logOut = function () {
+        User.clear();
+        $location.path('/');
+    };
+}
+
+function MainController($http, $location, User) {
+    var self = this;
+    self.connected = User.isConnected();
     self.title = 'Main';
     self.tagToSearch = '';
     self.searchedTag = '';
@@ -9,11 +26,6 @@ function MainController(Server, $http, $location) {
     self.company = '';
     self.project = '';
 
-    self.connect = function () {
-        Server.connect().then(function () {
-            self.connected = true;
-        })
-    };
     self.getTagsListCSV = function () {
         $http.get('/tagsListCSV/' + self.company + '/' + self.project).then(
             function (data) {
@@ -94,7 +106,7 @@ function DetailController($routeParams, $location, $http) {
     };
 }
 
-function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
+function MainGraphController($mdSidenav, $mdUtil, $log) {
     var self = this;
     self.collectionReady = false;
     self.display = function () {
@@ -127,8 +139,27 @@ function MainGraphController(Entities, $mdSidenav, $mdUtil, $log) {
 
 }
 
+function LoginController($location, Server, User) {
+    var self = this;
+    self.userName = '';
+    self.password = '';
+
+    self.login = function() {
+        Server.login(self.userName, self.password).then(
+            function(result) {
+                User.load('', self.userName, result.data);
+                $location.path('/main');
+            },
+            function(err) {
+                console.log(err);
+            }
+        );
+    };
+}
 
 angular.module('datapizz.controllers')
+    .controller('IndexController', IndexController)
     .controller('MainController', MainController)
+    .controller('LoginController', LoginController)
     .controller('DetailController', DetailController)
     .controller('MainGraphController', MainGraphController);

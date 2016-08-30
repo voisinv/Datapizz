@@ -3,14 +3,14 @@ html(ng-app='datapizz')
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/angular-material/0.11.4/angular-material.css')
         link(rel='stylesheet', href='stylessheets/main.css')
 
-    body(style='background-color: #ECD6AF')
+    body(style='background-color: #ECD6AF', ng-controller="IndexController as index")
         md-toolbar(layout='row', style='background-color: #4A8077; color: white;')
             h1.md-toolbar-tools Phare
             span.flex
-            //md-button(md-no-ink='md-no-ink', ng-if='!main.connected', ng-click='main.connect()') connexion
-            //md-button(md-no-ink='md-no-ink', ng-if='main.connected') Connect&eacute;
+            md-button(md-no-ink='md-no-ink', ng-if='!index.connected', ng-click='index.logIn()') Log in
+            md-button(md-no-ink='md-no-ink', ng-if='index.connected', ng-click='index.logOut()') Log out
 
-        div(ng-view)
+        div(flex="70" flex-offset="15", ng-view)
 
         //section(layout='row', layout-align='center center', ng-controller='MainGraphController as graphCtrl', ng-if='main.connected')
         //   main-graph.graph(collection='graphCtrl.entities', itemselected='')
@@ -33,6 +33,7 @@ html(ng-app='datapizz')
     script(src='javascripts/directives/MainGraph.js')
     script(src='javascripts/services/Entities.js')
     script(src='javascripts/services/Server.js')
+    script(src='javascripts/services/User.js')
 
 
 

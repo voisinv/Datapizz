@@ -12,7 +12,7 @@ collection.prototype.load = function(datas) {
 };
 collection.prototype.get = function() {
   return this;
-}
+};
 
 function entities () {
     var privateCollection;

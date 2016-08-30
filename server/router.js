@@ -54,5 +54,8 @@ router.get('/addTag/:company/:project/:tagValue/:tagCategory', function(req, res
         entities.addTag(res, req.params.company.toLowerCase(), req.params.project.toLowerCase(), req.params.tagValue, req.params.tagCategory);
     }
 });
+router.post('/login', function(req, res) {
+    entities.login(res, req.body);
+});
 
 module.exports = router;

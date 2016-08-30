@@ -221,6 +221,13 @@ var entities = {
             category: tagCategory
         });
         res.status(200);
+    },
+    login : function(res, userParams) {
+        if(userParams.userName === 'aflex' && userParams.password === 'lapu') {
+            res.status(200).send(true);
+        } else {
+            res.status(200).send(false);
+        }
     }
 };
 
