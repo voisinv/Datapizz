@@ -7,9 +7,11 @@
         </md-card-title>
         <md-card-content layout="column">
             <div style="margin-bottom: 15px;" ng-repeat="domain in detail.domains" layout="row" layout-align="center center">
-                <div flex="45">{{domain.title}}</div>
-                <div flex="5"></div>
-                <div flex="45">{{domain.url}}</div>
+                <div flex="20">{{domain.hostname}}</div>
+                <div flex="10"></div>
+                <div flex="70">
+                    <a href="{{domain.url}}" target="_blank">{{domain.title}}</a>
+                </div>
             </div>
         </md-card-content>
         <md-card-actions layout="row" layout-align="end center">
