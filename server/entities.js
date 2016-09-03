@@ -81,7 +81,7 @@ function getTagsList(result) {
         articles.forEach(function (article) {
             if (article.tags && article.tags.length > 0) {
                 article.tags.forEach(function (tag) {
-                    var tempTag = _.findWhere(tagsList, {value: tag});
+                    var tempTag = _.find(tagsList, {value: tag});
                     if (tempTag) {
                         tempTag.weight++;
                     } else {
