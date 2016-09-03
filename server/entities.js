@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var Firebase = require('firebase');
 var json2csv = require('json2csv');
+var url = require('url');
 
 // PRIVATE
 function getDataBase(company, project) {
@@ -119,7 +120,12 @@ function getUlsFromTag(result, tag) {
 
     articles.forEach(function(article) {
         if(article.tags && article.tags.length && _.indexOf(article.tags, tag) !== -1) {
-            obj.domains.push({url: article.url, title: article.title});
+            var articleUrl = 'http://' + article.url;
+            obj.domains.push({
+                hostname: url.parse(articleUrl).hostname,
+                url: articleUrl,
+                title: article.title
+            });
         }
     });
     return obj
