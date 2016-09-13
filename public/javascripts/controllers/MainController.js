@@ -15,7 +15,7 @@ function IndexController($location, $scope, User) {
     };
 }
 
-function MainController($http, $location, User) {
+function MainController($http, $location, $scope, User) {
     var self = this;
     self.connected = User.isConnected();
     self.title = 'Main';
@@ -25,6 +25,14 @@ function MainController($http, $location, User) {
 
     self.company = '';
     self.project = '';
+
+    self.chipsStr = ['a'];
+    $scope.$on('addNewChip', function(event, arg) {
+        console.log(arg);
+    });
+    $scope.$on('removeChip', function(event, arg) {
+        console.log(arg);
+    });
 
     self.getTagsListCSV = function () {
         $http.get('/tagsListCSV/' + self.company + '/' + self.project).then(
