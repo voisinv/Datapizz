@@ -9,7 +9,7 @@ function newChip($rootScope) {
         link: function (scope, elem, attrs) {
             var newChipElement = elem.children('.demo-input-container');
             if(newChipElement) {
-
+                // TODO : bug sur le passage de valeur depuis ctrl val tjrs = 'chip'
                 var str = attrs.val;
                 var isOpened = false;
                 if(str && str !== '') {
