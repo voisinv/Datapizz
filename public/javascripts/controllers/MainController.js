@@ -26,9 +26,10 @@ function MainController($http, $location, $scope, User) {
     self.company = '';
     self.project = '';
 
-    self.chipsStr = ['a'];
+    self.chipsStr = ['chip1', 'chip2'];
     $scope.$on('addNewChip', function(event, arg) {
         console.log(arg);
+        self.chipsStr.push(arg);
     });
     $scope.$on('removeChip', function(event, arg) {
         console.log(arg);
