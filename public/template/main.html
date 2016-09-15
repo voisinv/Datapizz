@@ -117,8 +117,8 @@
     <!-- add article -->
     <!-- ... -->
 </div>
-
-<div ng-repeat="chip in main.chipsStr">
-    {{chip}}
-    <new-chip val="chip"></new-chip>
-</div>
+<!--<div layout="row">-->
+    <div ng-repeat="chip in main.chipsStr">
+        <new-chip val="{{chip.value}}"></new-chip>
+    </div>
+<!--</div>-->

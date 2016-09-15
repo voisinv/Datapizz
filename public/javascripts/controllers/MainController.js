@@ -26,13 +26,19 @@ function MainController($http, $location, $scope, User) {
     self.company = '';
     self.project = '';
 
-    self.chipsStr = ['chip1', 'chip2'];
+    self.chipsStr = [{value: 'chip1'}, {value: 'chip2'}, {value: ''}];
     $scope.$on('addNewChip', function(event, arg) {
-        console.log(arg);
-        self.chipsStr.push(arg);
+        // TODO : vérif non existant
+        console.log('new chip : ' + arg);
+        self.chipsStr[self.chipsStr.length - 1] = {value: arg};
+        self.chipsStr.push({value: ''});
     });
     $scope.$on('removeChip', function(event, arg) {
+        // TODO : vérif bugs ?
         console.log(arg);
+        var id = _.findIndex(self.chipsStr, {value: arg});
+        self.chipsStr.splice(id, 1);
+        console.log(self.chipsStr);
     });
 
     self.getTagsListCSV = function () {

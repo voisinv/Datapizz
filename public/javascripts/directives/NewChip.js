@@ -4,12 +4,11 @@ function newChip($rootScope) {
         restrict: 'E',
         templateUrl: 'template/newChip.html',
         scope: {
-            val: '='
+            val: '@?'
         },
         link: function (scope, elem, attrs) {
             var newChipElement = elem.children('.demo-input-container');
             if(newChipElement) {
-                // TODO : bug sur le passage de valeur depuis ctrl val tjrs = 'chip'
                 var str = attrs.val;
                 var isOpened = false;
                 if(str && str !== '') {
@@ -46,7 +45,7 @@ function newChip($rootScope) {
                         comfortZone: 0
                     });
                 });
-                newChipElement.click(function () {
+                newChipElement.children('.new-tag-component').click(function () {
                     if (isOpened) {
                         // send tag to remove
                         $rootScope.$broadcast('removeChip', newChipElement.children('.input-style').val());
@@ -70,6 +69,7 @@ function newChip($rootScope) {
                         newChipElement.children('.new-tag-component').removeClass('rotate');
                         newChipElement.children('.new-tag-component').addClass('unrotate');
                         isOpened = !isOpened;
+                        $rootScope.$broadcast('removeChip', newChipElement.children('.input-style').val());
                     } else {
                         // open it
                         newChipElement.children('.input-style').autoGrowInput({
@@ -92,17 +92,19 @@ function newChip($rootScope) {
                         newChipElement.children('.new-tag-component').removeClass('unrotate');
                         newChipElement.children('.new-tag-component').addClass('rotate');
                         isOpened = !isOpened;
+
+                        $(document).keypress(function (e) {
+                            // TODO envoyer seulement le tag en cours
+                            if (e.which == 13) {
+                                $rootScope.$broadcast('addNewChip', newChipElement.children('.input-style').val());
+                            }
+                        });
                     }
                 });
                 $(window).resize(function () {
                     newChipElement.children('.input-style').trigger('autogrow');
                 });
 
-                $(document).keypress(function (e) {
-                    if (e.which == 13) {
-                        $rootScope.$broadcast('addNewChip', newChipElement.children('.input-style').val());
-                    }
-                });
             }
         }
     };
