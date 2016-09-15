@@ -2,5 +2,5 @@
 Datapizz.iml
 node_modules
 npm-debug.log
-public/stylessheets/*.css
+public/stylessheets/main.css
 .DS_Store

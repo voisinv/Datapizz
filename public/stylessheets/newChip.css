@@ -1,0 +1,52 @@
+.new-tag-component {
+    position: absolute;
+    margin-top: 0px;
+    height: 50px;
+    min-width: 50px;
+    background-color: salmon;
+    border-radius: 40px;
+    margin-left: -50px;
+    cursor: pointer;
+}
+.rotate {
+    transition: 100ms linear all;
+    transform: rotate(45deg);
+    margin-left: -20px;
+}
+.unrotate {
+    transition: 100ms linear all;
+    margin-left: -41px;
+}
+
+.input-style {
+    border: 10px solid salmon;
+    border-radius: 40px;
+    padding: 0px 20px 0px 0px;
+    height: 50px;
+    min-width: 10px;
+    background-color: salmon;
+    color: white;
+    outline: none;
+    font-size: 1.5em;
+}
+
+.vertical {
+    display: block;
+    background-color: white;
+    height: 40px;
+    width: 3px;
+    position: absolute;
+    top: 5px;
+    left: 24px;
+    border-radius: 5px;
+}
+.horizontal {
+    display: block;
+    background-color: white;
+    height: 3px;
+    width: 40px;
+    position: absolute;
+    top: 24px;
+    left: 5px;
+    border-radius: 5px;
+}
