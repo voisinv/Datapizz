@@ -37,7 +37,8 @@ function MainController($http, $location, $scope, User) {
         // TODO : vérif bugs ?
         console.log(arg);
         var id = _.findIndex(self.chipsStr, {value: arg});
-        self.chipsStr.splice(id, 1);
+        //self.chipsStr.splice(id, 1);
+        self.chipsStr = [{value: 'chip1'}, {value: 'chip2'}, {value: ''}];
         console.log(self.chipsStr);
     });
 
