@@ -26,21 +26,30 @@ function MainController($http, $location, $scope, User) {
     self.company = '';
     self.project = '';
 
-    self.chipsStr = [{value: 'chip1'}, {value: 'chip2'}, {value: ''}];
+    self.chipsStr = [{value: ''}];
+    // TODO alignement sur plusieurs lignes
     $scope.$on('addNewChip', function(event, arg) {
-        // TODO : vérif non existant
-        console.log('new chip : ' + arg);
-        self.chipsStr[self.chipsStr.length - 1] = {value: arg};
-        self.chipsStr.push({value: ''});
+        if(_.findIndex(self.chipsStr, {value: arg}) === -1) {
+            self.addChip(arg);
+        }
     });
+    self.addChip = function(chip) {
+        console.log('addChip: ' + chip);
+        self.chipsStr[self.chipsStr.length - 1] = {value: chip};
+        self.chipsStr.push({value: ''});
+    };
+
     $scope.$on('removeChip', function(event, arg) {
         // TODO : vérif bugs ?
-        console.log(arg);
-        var id = _.findIndex(self.chipsStr, {value: arg});
-        //self.chipsStr.splice(id, 1);
-        self.chipsStr = [{value: 'chip1'}, {value: 'chip2'}, {value: ''}];
-        console.log(self.chipsStr);
+        self.removeChip(arg);
     });
+    self.removeChip = function(chip) {
+        console.log('removeChip: ' + chip);
+        var id = _.findIndex(self.chipsStr, {value: chip});
+        if(id !== -1) {
+            self.chipsStr.splice(id, 1);
+        }
+    };
 
     self.getTagsListCSV = function () {
         $http.get('/tagsListCSV/' + self.company + '/' + self.project).then(

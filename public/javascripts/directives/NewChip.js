@@ -9,6 +9,10 @@ var autoGrow = function(minWidth, newChipElement) {
     });
 };
 
+var getInputValue = function(newChipElement) {
+    return newChipElement.children('.input-style').val();
+};
+
 function newChip($rootScope) {
     return {
         restrict: 'E',
@@ -44,8 +48,7 @@ function newChip($rootScope) {
 
                 newChipElement.children('.new-tag-component').click(function () {
                     if (isOpened) {
-                        // send tag to remove
-                        $rootScope.$broadcast('removeChip', newChipElement.children('.input-style').val());
+                        var chip = getInputValue(newChipElement);
                         // remove text
                         newChipElement.children('.input-style').val('');
                         // close it
@@ -60,8 +63,9 @@ function newChip($rootScope) {
                         newChipElement.children('.new-tag-component').removeClass('rotate');
                         newChipElement.children('.new-tag-component').addClass('unrotate');
                         isOpened = !isOpened;
-                        $rootScope.$broadcast('removeChip', newChipElement.children('.input-style').val());
-
+                        // send tag to remove
+                        $rootScope.$broadcast('removeChip', chip);
+                        scope.$apply();
                     } else {
                         // open it
                         autoGrow(10, newChipElement);
@@ -79,10 +83,10 @@ function newChip($rootScope) {
                         newChipElement.children('.new-tag-component').addClass('rotate');
                         isOpened = !isOpened;
 
-                        $(document).keypress(function (e) {
-                            // TODO envoyer seulement le tag en cours
-                            if (e.which == 13) {
-                                $rootScope.$broadcast('addNewChip', newChipElement.children('.input-style').val());
+                        newChipElement.keypress(function (e) {
+                            if (e.which == 13 && getInputValue(newChipElement) !== '') {
+                                $rootScope.$broadcast('addNewChip', getInputValue(newChipElement));
+                                scope.$apply();
                             }
                         });
                     }
