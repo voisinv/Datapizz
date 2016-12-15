@@ -2,6 +2,7 @@ var _ = require('lodash');
 var Firebase = require('firebase');
 var json2csv = require('json2csv');
 var url = require('url');
+var fs = require('fs');
 
 // PRIVATE
 function getDataBase(company, project) {
@@ -177,35 +178,53 @@ var entities = {
     },
     getTagsListCSV : function(res, company, project) {
         var db = getDataBase(company, project);
+        console.log('yoyoyo');
         db.once('value', function(s) {
             var tagsList = getTagsList(s.val());
             var fields = ['id', 'label', 'weight'];
             var myData = [];
 
+            console.log('tagsList.txt');
+            fs.writeFile('tagsList.txt', tagsList);
+
             tagsList.forEach(function(tag) {
                 myData.push({'id': tag.value, 'label': tag.value, 'weight': tag.weight});
             });
+            
+            console.log('tagsList.json');
+            fs.writeFile('tagsList.json', myData);
 
             json2csv({ data: myData, fields: fields }, function(err, csv) {
                 if (err) console.log(err);
+                console.log('tagsList.csv');
+                fs.writeFile('tagsList.csv', csv);
                 res.status(200).send(csv);
             });
         });
     },
     getLinksListCSV : function(res, company, project) {
         var db = getDataBase(company, project);
+        console.log('yoyoyo');
         db.once('value', function(s) {
             var tagsLinks = getLinksList(s.val());
             var fields = ['source', 'target', 'url', 'title'];
             var myData = [];
             var result;
 
+            console.log('linksList.txt');
+            fs.writeFile('linksList.txt', tagsLinks);
+
             tagsLinks.links.forEach(function(link) {
                 myData.push({'source': link.source, 'target': link.target, 'url': link.url, 'title': link.title});
             });
+            
+            console.log('linksList.json');
+            fs.writeFile('linksList.json', myData);
 
             json2csv({ data: myData, fields: fields }, function(err, csv) {
                 if (err) console.log(err);
+                console.log('linksList.csv');
+                fs.writeFile('linksList.csv', csv);
                 res.status(200).send(csv);
             });
         });
